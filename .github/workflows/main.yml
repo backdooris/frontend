@@ -5,11 +5,11 @@ name: CI/CD
 
 on:
   push:
-    branches: [main]
+    branches: [] # main 제거 추후 수정
     tags:
       - "v*"
   pull_request:
-    branches: [main]
+    branches: [] # main 제거 추후 수정
   schedule:
     - cron: "0 7 * * *"
   workflow_dispatch:
