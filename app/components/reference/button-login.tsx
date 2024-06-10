@@ -2,7 +2,7 @@
 /* SPDX-License-Identifier: MIT */
 
 import { Button, ButtonProps } from "@mui/joy";
-import { AnonymousIcon, GoogleIcon } from "../icons";
+import { AnonymousIcon, GoogleIcon } from "../../icons";
 
 export function LoginButton(props: LoginButtonProps): JSX.Element {
   const { signInMethod, ...other } = props;
@@ -36,7 +36,7 @@ export type LoginButtonProps = Omit<
   ButtonProps<
     "button",
     {
-      signInMethod:  "google.com" | "anonymous";
+      signInMethod: "google.com" | "anonymous";
     }
   >,
   "children"

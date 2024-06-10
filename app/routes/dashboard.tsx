@@ -133,45 +133,6 @@ export const Component = function Dashboard(): JSX.Element {
           />
         </Grid>
       </Grid>
-
-      <Sheet>
-        <Table borderAxis="xBetween" color="neutral" variant="outlined">
-          <thead>
-            <tr>
-              <th style={{ width: "100%" }}>Column 1</th>
-              <th style={{ width: "100%" }}>Column 1</th>
-              <th style={{ width: "100%" }}>Column 1</th>
-            </tr>
-          </thead>
-          <tbody>
-            <div style={{ width: "100%" }}>
-              <Dropdown>
-                <MenuButton css={{ width: "100%" }}>drop down menu</MenuButton>
-                <Menu css={{ width: "90%" }}>
-                  <MenuItem>Add item</MenuItem>
-                </Menu>
-              </Dropdown>
-            </div>
-          </tbody>
-          <tbody>
-            <tr>
-              <th style={{ width: "100%" }}>Column 1</th>
-            </tr>
-          </tbody>
-          <tbody>
-            <tr>
-              <th style={{ width: "40%" }}>Column 1</th>
-              <th style={{ width: "64px" }}>Column 2</th>
-            </tr>
-          </tbody>
-          <tbody>
-            <tr>
-              <th style={{ width: "40%" }}>Column 1</th>
-              <th style={{ width: "64px" }}>Column 2</th>
-            </tr>
-          </tbody>
-        </Table>
-      </Sheet>
     </Container>
   );
 };
