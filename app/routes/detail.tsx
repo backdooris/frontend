@@ -6,7 +6,7 @@ import { MainHeader } from "../components/main-header";
 import { QualificationDetail } from "../components/qualification-detail";
 import { RecruitmentNotice } from "../components/recruitment-notice";
 
-export const Component = function Dashboard(): JSX.Element {
+export const Component = function Detail(): JSX.Element {
   return (
     <Container sx={{ py: 2 }}>
       <MainHeader />

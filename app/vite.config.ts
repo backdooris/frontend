@@ -6,7 +6,14 @@ import { URL, fileURLToPath } from "node:url";
 import { loadEnv } from "vite";
 import { defineProject } from "vitest/config";
 
-const publicEnvVars = ["APP_ENV", "APP_NAME", "APP_ORIGIN", "API_URL"];
+const publicEnvVars = [
+  "APP_ENV",
+  "APP_NAME",
+  "APP_ORIGIN",
+  "API_URL",
+  "SUPABASE_URL",
+  "SUPABASE_KEY",
+];
 
 /**
  * Vite configuration.

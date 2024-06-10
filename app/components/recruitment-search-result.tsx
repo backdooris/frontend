@@ -9,11 +9,13 @@ import {
   Stack,
   Typography,
 } from "@mui/joy";
+import { JobInfoItem } from "./recruitment-notice";
+import { formatDate } from "../utils/date-formater";
 
 export function RecruitmentSearchResult(
   props: RecruitmentSearchResultProps,
 ): JSX.Element {
-  const { sx, ...other } = props;
+  const { sx, data, ...other } = props;
 
   return (
     <Container
@@ -22,19 +24,23 @@ export function RecruitmentSearchResult(
       }}
       {...other}
     >
-      <Typography level="h2">검색결과 (34건)</Typography>
+      <Typography level="h2">검색결과 ({data.length}건)</Typography>
 
       <Stack sx={{ mt: 3 }} spacing={3}>
-        <ResultCard />
-        <ResultCard />
-        <ResultCard />
-        <ResultCard />
+        {data.map((job) => (
+          <ResultCard {...job} key={job.key} />
+        ))}
       </Stack>
     </Container>
   );
 }
 
-function ResultCard(): JSX.Element {
+const ResultCard: React.FC<JobInfoItem> = ({
+  region_kor,
+  created_at,
+  data,
+}) => {
+
   return (
     <Card orientation="horizontal" variant="soft">
       <CardOverflow sx={{ flex: 1 }}>
@@ -56,19 +62,19 @@ function ResultCard(): JSX.Element {
       </CardOverflow>
       <CardContent>
         <Typography level="title-lg" fontWeight="lg">
-          4등급 여자 어르신
-        </Typography>
-        <Typography level="title-lg" fontWeight="lg">
-          요양 보호사 구인
+          {data.title}
         </Typography>
         <Typography level="body-sm" fontWeight="md">
-          담당업무 : 요양 보호사
+          {data.education}
         </Typography>
         <Typography level="body-sm" fontWeight="md">
-          구인 대상자 : 4등급 여자 어르신
+          {data.experience}
         </Typography>
-        <Typography level="body-sm" fontWeight="md">
-          구인 대상자 : 4등급 여자 어르신
+        <Typography level="body-sm" fontWeight="sm">
+          {data.company}
+        </Typography>
+        <Typography level="body-sm" fontWeight="sm">
+          {region_kor}
         </Typography>
 
         <Box>
@@ -84,12 +90,14 @@ function ResultCard(): JSX.Element {
               mt: 1,
             }}
           >
-            2024년 05월 13일 18시 00분
+            {formatDate(new Date(created_at))}
           </Typography>
         </Box>
       </CardContent>
     </Card>
   );
-}
+};
 
-type RecruitmentSearchResultProps = Omit<ContainerProps, "children">;
+type RecruitmentSearchResultProps = Omit<ContainerProps, "children"> & {
+  data: JobInfoItem[];
+};
