@@ -9,8 +9,8 @@ import {
   Stack,
   Typography,
 } from "@mui/joy";
+import { formatDate } from "../../utils/date-formater";
 import { JobInfoItem } from "./recruitment-notice";
-import { formatDate } from "../utils/date-formater";
 
 export function RecruitmentSearchResult(
   props: RecruitmentSearchResultProps,
@@ -40,7 +40,6 @@ const ResultCard: React.FC<JobInfoItem> = ({
   created_at,
   data,
 }) => {
-
   return (
     <Card orientation="horizontal" variant="soft">
       <CardOverflow sx={{ flex: 1 }}>

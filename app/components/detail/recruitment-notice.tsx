@@ -11,7 +11,7 @@ import {
   selectClasses,
 } from "@mui/joy";
 import { Fragment, useEffect, useState } from "react";
-import { supabase } from "../utils/supabase";
+import { supabase } from "../../utils/supabase";
 import { RecruitmentSearchResult } from "./recruitment-search-result";
 
 export function RecruitmentNotice(props: RecruitmentNoticeProps): JSX.Element {
