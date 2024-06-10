@@ -49,7 +49,7 @@ const ResultCard: React.FC<JobInfoItem> = ({
           sx={{
             mt: 1,
             ml: 2,
-            width: 120,
+            width: 80,
           }}
         >
           <img
