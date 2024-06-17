@@ -2,7 +2,7 @@ import { Container, Accordion, AccordionDetails, AccordionGroup, AccordionSummar
 import { MainHeader } from "../components/detail/main-header";
 import { RecruitmentNotice } from "../components/detail/recruitment-notice";
 
-function QualificationTable(){
+function CertificationTable(){
   return(
     <>
     <div>자격증 시험 날짜 채용공고 수</div>
@@ -35,4 +35,4 @@ function QualificationTable(){
   )
 }
 
-export { QualificationTable };
+export { CertificationTable };

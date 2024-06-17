@@ -1,6 +1,6 @@
 import {Stack, Card, SvgIcon} from "@mui/joy";
 
-function QualificationCardTable(){
+function CertificationCardTable(){
   return(
     <>
       <Stack spacing={1}>
@@ -63,4 +63,4 @@ function QualificationCardTable(){
   )
 }
 
-export { QualificationCardTable };
+export { CertificationCardTable };
