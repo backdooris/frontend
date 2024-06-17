@@ -1,6 +1,12 @@
 import {Stack, Card, SvgIcon} from "@mui/joy";
+import { useEffect, useState } from "react";
+import { supabase } from "../../utils/supabase";
+
 
 function CertificationCardTable(){
+  const [loading, setLoading] = useState<boolean>(true);
+
+
   return(
     <>
       <Stack spacing={1}>
