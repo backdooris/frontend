@@ -1,7 +1,7 @@
+import { useState, useEffect } from "react";
 import { Container, Accordion, AccordionDetails, AccordionGroup, AccordionSummary } from "@mui/joy";
 import { MainHeader } from "../components/detail/main-header";
 import { RecruitmentNotice } from "../components/detail/recruitment-notice";
-import { useState, useEffect } from 'react';
 import { supabase } from "../../utils/supabase";
 
 async function fetchCertifications() {
@@ -21,6 +21,7 @@ async function fetchCertifications() {
   }));
 }
 
+
 async function fetchCertificationName(id: string) {
   const { data, error } = await supabase
     .from('certification')
@@ -32,11 +33,14 @@ async function fetchCertificationName(id: string) {
   return data[0].code_kor;
 }
 
-function CertificationTable({name, jobsCnt, applicantsCnt, examDate }){
+function CertificationTable({ filterComponentProps }){
+  const { filter, setFilter } = filterComponentProps;
+
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [certifications, setCertifications] = useState<CertificationInfo[]>([]);
 
+  console.log(filterComponentProps)
   useEffect(() => {
     async function fetchAndCombineData() {
       try {
