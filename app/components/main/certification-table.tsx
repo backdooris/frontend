@@ -7,18 +7,17 @@ import { supabase } from "../../utils/supabase";
 async function fetchCertifications() {
   const { data, error } = await supabase
     .from('certification_detail')
-    .select('certification', 'data')
+    .select('certification, data->jobs_cnt')
     .limit(10); 
 
   if (error) {
     console.error('Error fetching data:', error);
     return [];
   }
-  console.log(data)
 
   return data.map(item => ({
-    certification: item.certification,
-    jobs_cnt: item.jobs_cnt,
+    id: item.certification,
+    jobsCnt: item.jobs_cnt,
   }));
 }
 
@@ -30,7 +29,7 @@ async function fetchCertificationName(id: string) {
   if (error) {
     throw new Error(`Error fetching certification name: ${error.message}`);
   }
-  return data.name;
+  return data[0].code_kor;
 }
 
 function CertificationTable({name, jobsCnt, applicantsCnt, examDate }){
@@ -43,16 +42,14 @@ function CertificationTable({name, jobsCnt, applicantsCnt, examDate }){
       try {
         setLoading(true);
         const details = await fetchCertifications();
-        console.log('details', details)
 
         const combinedData: CertificationInfo[] = await Promise.all(
           details.map(async (detail) => {
-            const name = await fetchCertificationName(detail.certification);
-
+            const name = await fetchCertificationName(detail.id);
             return { ...detail, name };
           })
         );
-        setCertifications(details);
+        setCertifications(combinedData);
 
       } catch (err) {
         setError(err.message);
@@ -74,7 +71,7 @@ function CertificationTable({name, jobsCnt, applicantsCnt, examDate }){
             <AccordionSummary>1 Depth (자격증 명: {certification.name})</AccordionSummary>
             <Accordion>
               <AccordionSummary>2 Depth (채용 관련)</AccordionSummary>
-              <AccordionDetails>3 Depth (채용 공고 수: 2XX 개) 지원자: {certification.name}</AccordionDetails>
+              <AccordionDetails>3 Depth (채용 공고 수: {certification.jobsCnt}) 지원자: </AccordionDetails>
             </Accordion>
             <Accordion>
               <AccordionSummary>2 Depth (자격증 관련)</AccordionSummary>
@@ -86,33 +83,7 @@ function CertificationTable({name, jobsCnt, applicantsCnt, examDate }){
     </>
   )
 }
-  //   <div>자격증 시험 날짜 채용공고 수</div>
-  //   <AccordionGroup size={"lg"}>
-  //     <Accordion>
-  //       <AccordionSummary>1 Depth (자격증 명: {certifications.name})</AccordionSummary>
-  //       <Accordion>
-  //         <AccordionSummary>2 Depth (채용 관련)</AccordionSummary>
-  //         <AccordionDetails>3 Depth (채용 공고 수: 2XX 개) 지원자: {certifications.name}</AccordionDetails>
-  //       </Accordion>
-  //       <Accordion>
-  //         <AccordionSummary>2 Depth (자격증 관련)</AccordionSummary>
-  //         <AccordionDetails>3 Depth (지원자: 2X 명) 시험 날짜: {certifications.name}</AccordionDetails>
-  //       </Accordion>
-  //     </Accordion>
 
-  //     <Accordion>
-  //       <AccordionSummary>1 Depth (자격증 명: 굴삭기운전기능사)</AccordionSummary>
-  //     <Accordion>
-  //       <AccordionSummary>2 Depth (채용 관련)</AccordionSummary>
-  //       <AccordionDetails>3 Depth (채용 공고 수: 2XX 개) 지원자: XX명</AccordionDetails>
-  //     </Accordion>
-  //     <Accordion>
-  //       <AccordionSummary>2 Depth (자격증 관련)</AccordionSummary>
-  //       <AccordionDetails>3 Depth (지원자: 2X 명) 시험 날짜: YYYY.MM.DD</AccordionDetails>
-  //     </Accordion>
-  //     </Accordion>
-  //   </AccordionGroup>
-  // </>
 
 
 export { CertificationTable };
