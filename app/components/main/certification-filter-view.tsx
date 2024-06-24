@@ -4,8 +4,12 @@ import { CertificationTable } from "./certification-table";
 
 
 export default function CertificationFilterView(){
-  const [filter, setFilter] = useState(null);
-  const filterOptions = ["인기순", "시험날짜 빠른 순"];
+  const [filter, setFilter] = useState("POPULARITY");
+  const FILTER_OPTIONS = {
+    POPULARITY: '인기순',
+    EXAM_DATE_ASC: '시험날짜 빠른 순',
+    JOBS_CNT: "채용공고 순"
+  };
 
   const filterComponentProps: FilterComponentProps = {
     filter,
@@ -14,7 +18,7 @@ export default function CertificationFilterView(){
 
   return(
     <>
-      <FilterDropDown options={filterOptions} componentProps={filterComponentProps}/>
+      <FilterDropDown options={FILTER_OPTIONS} componentProps={filterComponentProps}/>
       <CertificationTable filterComponentProps={filterComponentProps} />
     </>
   )
