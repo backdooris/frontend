@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FilterDropDown } from "./filter-drop-down";
 import { CertificationTable } from "./certification-table";
+import { Stack } from "@mui/joy";
 
 
 export default function CertificationFilterView(){

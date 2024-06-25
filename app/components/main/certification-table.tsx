@@ -97,7 +97,6 @@ async function fetchCertificationName(id: string) {
 
 function CertificationTable({ filterComponentProps }) {
   const { filter, setFilter } = filterComponentProps;
-
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [certifications, setCertifications] = useState<CertificationInfo[]>([]);

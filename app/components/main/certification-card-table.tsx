@@ -9,7 +9,7 @@ function CertificationCardTable(){
 
   return(
     <>
-      <Stack spacing={1}>
+      <Stack spacing={2}>
         <Card size="sm" variant="soft">
         금융 보험
           <SvgIcon>
