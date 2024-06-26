@@ -3,6 +3,9 @@ import {
   AccordionDetails,
   AccordionGroup,
   AccordionSummary,
+  Table,
+  Typography,
+  Box
 } from "@mui/joy";
 import { useEffect, useState } from "react";
 import { supabase } from "../../utils/supabase";
@@ -51,8 +54,8 @@ async function fetchCertificationData(filter) {
 async function fetchCertificationsFilteredByJobsCnt() {
   const { data, error } = await supabase
     .from("certification_detail")
-    .select("certification, data->>job_total_cnt")
-    .order("data->>jobs_cnt", { ascending: false })
+    .select("certification, job_total_cnt")
+    .order("job_total_cnt", { ascending: false })
     .limit(10);
 
   if (error) {
@@ -63,14 +66,15 @@ async function fetchCertificationsFilteredByJobsCnt() {
 
   return data.map((item) => ({
     id: item.certification,
-    jobsCnt: item.jobs_total_cnt,
+    jobsCnt: item.job_total_cnt,
   }));
 }
 
 async function fetchCertifications() {
   const { data, error } = await supabase
     .from("certification_detail")
-    .select("certification, data->jobs_cnt")
+    .select("certification, created_at, job_total_cnt")
+    .order("created_at", { ascending: false }) 
     .limit(10);
 
   if (error) {
@@ -80,7 +84,7 @@ async function fetchCertifications() {
 
   return data.map((item) => ({
     id: item.certification,
-    jobsCnt: item.jobs_cnt,
+    jobsCnt: item.job_total_cnt,
   }));
 }
 
@@ -120,25 +124,54 @@ function CertificationTable({ filterComponentProps }) {
 
   return (
     <>
-      {certifications?.map((certification) => (
-        <AccordionGroup size={"lg"} key={certification.name}>
-          <Accordion>
-            <AccordionSummary>자격증 명: {certification.name}</AccordionSummary>
-            <Accordion>
-              <AccordionSummary>2 Depth (채용 관련)</AccordionSummary>
-              <AccordionDetails>
-                3 Depth (채용 공고 수: {certification.jobsCnt}) 지원자:{" "}
-              </AccordionDetails>
-            </Accordion>
-            <Accordion>
-              <AccordionSummary>2 Depth (자격증 관련)</AccordionSummary>
-              <AccordionDetails>
-                3 Depth (지원자: 2X 명) 시험 날짜: {certification.name}
-              </AccordionDetails>
-            </Accordion>
-          </Accordion>
-        </AccordionGroup>
-      ))}
+        <Table
+          borderAxis="xBetween"
+          color="neutral"
+          size="lg"
+          stickyHeader={false}
+          variant="outlined"
+        >
+          <thead>
+            <tr>
+              <th style={{ width: '40%' }}>자격증</th>
+              <th>시험 날짜</th>
+              <th>채용공고 수</th>
+            </tr>
+          </thead>
+          </Table>
+          
+          {certifications?.map((certification) => (
+          <Accordion key={certification.name}>
+          <AccordionSummary >
+            <Typography>{certification.name}</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+              <Box pl={2}>
+                  <Accordion>
+                  <AccordionSummary >
+                    <Typography>채용 관련</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Typography>채용 공고 수 : {certification.jobsCnt} 지원자 : xx명</Typography>
+                  </AccordionDetails>
+                  </Accordion>
+              </Box>
+          </AccordionDetails>
+          <AccordionDetails>
+              <Box pl={2}>
+                  <Accordion>
+                  <AccordionSummary >
+                    <Typography>자격증 관련</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Typography>지원자: XX명 준비 기간: XX</Typography>
+                  </AccordionDetails>
+                  </Accordion>
+              </Box>
+          </AccordionDetails>
+        </Accordion>
+
+          ))}
     </>
   );
 }
