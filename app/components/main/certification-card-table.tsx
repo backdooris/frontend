@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "../../utils/supabase";
 
 
-function CertificationCardTable(){
+export default function CertificationCardTable(){
   const [loading, setLoading] = useState<boolean>(true);
 
 
@@ -69,4 +69,3 @@ function CertificationCardTable(){
   )
 }
 
-export { CertificationCardTable };
