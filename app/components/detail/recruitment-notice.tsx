@@ -2,6 +2,7 @@ import { KeyboardArrowDown } from "@mui/icons-material";
 import {
   Box,
   Button,
+  CircularProgress,
   Container,
   ContainerProps,
   Option,
@@ -10,42 +11,20 @@ import {
   Typography,
   selectClasses,
 } from "@mui/joy";
-import { Fragment, useEffect, useState } from "react";
-import { supabase } from "../../utils/supabase";
+import { Fragment, useState } from "react";
+import { useJobInfos } from "../../api/useJobInfos";
 import { RecruitmentSearchResult } from "./recruitment-search-result";
 
 export function RecruitmentNotice(props: RecruitmentNoticeProps): JSX.Element {
   const { sx, ...other } = props;
-  const [loading, setLoading] = useState<boolean>(true);
-  const [jobInfo, setJobInfo] = useState<JobInfoItem[]>([]);
+
+  const { data: jobInfo, isLoading } = useJobInfos();
   const [categoryInfo, setCategoryInfo] = useState<CategoryInfo>({
     largeCategory: "",
     middleCategory: "",
   });
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const { data, error } = await supabase
-        .from("job")
-        .select(
-          "id, created_at, updated_at, region_kor, data, date_enrolled, date_end, key",
-        )
-        .limit(100);
-
-      if (error) {
-        console.error("Error fetching data:", error);
-      } else {
-        setJobInfo(data);
-      }
-      setLoading(false);
-    };
-
-    fetchData();
-  }, []);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  
+  if (isLoading) return <CircularProgress />;
 
   return (
     <Container

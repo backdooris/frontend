@@ -2,6 +2,8 @@
 /* SPDX-License-Identifier: MIT */
 
 import { CssBaseline, CssVarsProvider } from "@mui/joy";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { SnackbarProvider } from "notistack";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
@@ -11,6 +13,7 @@ import { Router } from "./routes/index";
 
 const container = document.getElementById("root");
 const root = createRoot(container!);
+const queryClient = new QueryClient();
 
 root.render(
   <StrictMode>
@@ -18,7 +21,10 @@ root.render(
       <SnackbarProvider>
         <CssBaseline />
         <StoreProvider>
-          <Router />
+          <QueryClientProvider client={queryClient}>
+            <ReactQueryDevtools initialIsOpen={false} />
+            <Router />
+          </QueryClientProvider>
         </StoreProvider>
       </SnackbarProvider>
     </CssVarsProvider>

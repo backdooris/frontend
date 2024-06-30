@@ -54,6 +54,15 @@ export default defineProject(async ({ mode }) => {
 
     server: {
       port: 3000,
+      proxy: {
+        "/openapi": {
+          target: "http://openapi.q-net.or.kr/api/service/rest",
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/openapi/, ""),
+          secure: false,
+          ws: true,
+        },
+      },
     },
 
     test: {
