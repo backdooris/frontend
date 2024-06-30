@@ -22,5 +22,6 @@ export const useJobInfos = () => {
   return useQuery<JobInfoItem[], Error>({
     queryKey: ["jobInfos"],
     queryFn: fetchJobInfos,
+    staleTime: 5 * 60 * 1000 // 5 minutes
   });
 };

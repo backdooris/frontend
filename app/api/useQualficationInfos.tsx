@@ -21,5 +21,6 @@ export const useQualificationInfos = () => {
   return useQuery<Qualification[], Error>({
     queryKey: ["qualificationInfos"],
     queryFn: fetchQualificationInfos,
+    staleTime: 60 * 60 * 1000 // 1hour
   });
 };
