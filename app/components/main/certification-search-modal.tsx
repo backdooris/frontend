@@ -9,13 +9,52 @@ import {
   Typography,
 } from "@mui/joy";
 import { useEffect, useState } from "react";
+import { supabase } from "../../utils/supabase";
 
-async function fetchDetailCategoryList(code) {
-  return detailCategoryList;
+async function fetchDetailCategoryList(obligfldcd) {
+  const { data, error } = await supabase
+    .from("certification")
+    .select("mdobligfldcd, mdobligfldnm")
+    .eq("obligfldcd", obligfldcd);
+
+  if (error) {
+    console.error("Error fetching data:", error);
+    return [];
+  }
+  const formattedData = data.map((item) => ({
+    code: item.mdobligfldcd,
+    name: item.mdobligfldnm,
+  }));
+
+  const uniqueData = formattedData.filter(
+    (value, index, self) =>
+      index ===
+      self.findIndex((t) => t.code === value.code && t.name === value.name),
+  );
+  return uniqueData;
 }
 
-async function fetchCertificationList(detailCode) {
-  return certificationList;
+async function fetchCertificationList(mdobligfldcd) {
+  const { data, error } = await supabase
+    .from("certification")
+    .select("code_kor, jmcd")
+    .eq("mdobligfldcd", mdobligfldcd);
+
+  if (error) {
+    console.error("Error fetching data:", error);
+    return [];
+  }
+  const formattedData = data.map((item) => ({
+    code: item.jmcd,
+    name: item.code_kor,
+  }));
+
+  const uniqueData = formattedData.filter(
+    (value, index, self) =>
+      index ===
+      self.findIndex((t) => t.code === value.code && t.name === value.name),
+  );
+  return uniqueData;
 }
 
 function goToDetailPage(certificationCode) {
@@ -42,7 +81,7 @@ let certificationList = [
   { certificationCode: "6", name: "컨벤션기획사2급" },
 ];
 
-function CertificationSearchModal({ open, setOpen, code }) {
+function CertificationSearchModal({ open, setOpen, category }) {
   const [detailCategoryCode, setDetailCategoryCode] = useState("");
   const [certificationCode, setCertificationCode] = useState("");
   const [detailCategoryList, setDetailCategoryList] = useState([]);
@@ -52,14 +91,14 @@ function CertificationSearchModal({ open, setOpen, code }) {
   useEffect(() => {
     const fetchDetailCategoryData = async () => {
       try {
-        const detailCategoryData = await fetchDetailCategoryList(code);
+        const detailCategoryData = await fetchDetailCategoryList(category.code);
         setDetailCategoryList(detailCategoryData);
       } catch (error) {
         console.log("Failed to catch sub-categories", error);
       }
     };
     fetchDetailCategoryData();
-  }, [code]);
+  }, [category.code]);
 
   useEffect(() => {
     if (!detailCategoryCode) return;
@@ -88,20 +127,8 @@ function CertificationSearchModal({ open, setOpen, code }) {
     newValue: string | null,
   ) => {
     setCertificationCode(newValue);
-    // setOpen(false);
     console.log("닫기 클릭", newValue);
     goToDetailPage(newValue);
-  };
-
-  const handleSearch = () => {
-    if (!certificationCode) {
-      setErrorMessage("자격증을 선택해주세요");
-    } else {
-      setErrorMessage("");
-      setOpen(false);
-      console.log("닫기 클릭", open);
-      goToDetailPage(certificationCode);
-    }
   };
 
   return (
@@ -123,7 +150,7 @@ function CertificationSearchModal({ open, setOpen, code }) {
       >
         <ModalDialog variant="soft">
           <ModalClose />
-          <Typography>대분류</Typography>
+          <Typography>대분류 : {category.name} </Typography>
 
           <Select
             defaultValue="end"
@@ -132,10 +159,7 @@ function CertificationSearchModal({ open, setOpen, code }) {
             onChange={handleDetailCategoryChange}
           >
             {detailCategoryList.map((detailCategory) => (
-              <Option
-                key={detailCategory.detailCode}
-                value={detailCategory.detailCode}
-              >
+              <Option key={detailCategory.code} value={detailCategory.code}>
                 {detailCategory.name}
               </Option>
             ))}
@@ -147,10 +171,7 @@ function CertificationSearchModal({ open, setOpen, code }) {
             onChange={handleCertificationCodeChange}
           >
             {certificationList?.map((certification) => (
-              <Option
-                key={certification.certificationCode}
-                value={certification.certificationCode}
-              >
+              <Option key={certification.code} value={certification.code}>
                 {certification.name}
               </Option>
             ))}
