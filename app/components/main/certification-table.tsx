@@ -54,8 +54,9 @@ async function fetchCertificationData(filter) {
 async function fetchCertificationsFilteredByJobsCnt() {
   const { data, error } = await supabase
     .from("certification_detail")
-    .select("certification, job_total_cnt")
-    .order("job_total_cnt", { ascending: false })
+    .select("*")
+    .not("data->>job_total_cnt", "is", null)
+    .order("data->>job_total_cnt", { ascending: false })
     .limit(10);
 
   if (error) {
@@ -66,25 +67,28 @@ async function fetchCertificationsFilteredByJobsCnt() {
 
   return data.map((item) => ({
     id: item.certification,
-    jobsCnt: item.job_total_cnt,
+    jobsCnt: item.data.job_total_cnt,
+    jobsApplicant: item.data.job_total_apply_cnt,
   }));
 }
 
 async function fetchCertifications() {
   const { data, error } = await supabase
     .from("certification_detail")
-    .select("certification, created_at, job_total_cnt")
-    .order("created_at", { ascending: false }) 
+    .select("*")
+    .not("data->>job_total_cnt", "is", null)
+    .order("created_at", { ascending: false })
     .limit(10);
 
   if (error) {
     console.error("Error fetching data:", error);
     return [];
   }
-
+  console.log("data++++++", data);
   return data.map((item) => ({
     id: item.certification,
-    jobsCnt: item.job_total_cnt,
+    jobsCnt: item.data.job_total_cnt,
+    jobsApplicant: item.data.job_total_apply_cnt,
   }));
 }
 
@@ -124,54 +128,56 @@ function CertificationTable({ filterComponentProps }) {
 
   return (
     <>
-        <Table
-          borderAxis="xBetween"
-          color="neutral"
-          size="lg"
-          stickyHeader={false}
-          variant="outlined"
-        >
-          <thead>
-            <tr>
-              <th style={{ width: '40%' }}>자격증</th>
-              <th>시험 날짜</th>
-              <th>채용공고 수</th>
-            </tr>
-          </thead>
-          </Table>
-          
-          {certifications?.map((certification) => (
-          <Accordion key={certification.name}>
-          <AccordionSummary >
+      <Table
+        borderAxis="xBetween"
+        color="neutral"
+        size="lg"
+        stickyHeader={false}
+        variant="outlined"
+      >
+        <thead>
+          <tr>
+            <th style={{ width: "40%" }}>자격증</th>
+            <th>시험 날짜</th>
+            <th>채용공고 수</th>
+          </tr>
+        </thead>
+      </Table>
+
+      {certifications?.map((certification) => (
+        <Accordion key={certification.name}>
+          <AccordionSummary>
             <Typography>{certification.name}</Typography>
           </AccordionSummary>
           <AccordionDetails>
-              <Box pl={2}>
-                  <Accordion>
-                  <AccordionSummary >
-                    <Typography>채용 관련</Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <Typography>채용 공고 수 : {certification.jobsCnt} 지원자 : xx명</Typography>
-                  </AccordionDetails>
-                  </Accordion>
-              </Box>
+            <Box pl={2}>
+              <Accordion>
+                <AccordionSummary>
+                  <Typography>채용 관련</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Typography>
+                    채용 공고 수 : {certification.jobsCnt} 지원자 :{" "}
+                    {certification.jobsApplicant} 명
+                  </Typography>
+                </AccordionDetails>
+              </Accordion>
+            </Box>
           </AccordionDetails>
           <AccordionDetails>
-              <Box pl={2}>
-                  <Accordion>
-                  <AccordionSummary >
-                    <Typography>자격증 관련</Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <Typography>지원자: XX명 준비 기간: XX</Typography>
-                  </AccordionDetails>
-                  </Accordion>
-              </Box>
+            <Box pl={2}>
+              <Accordion>
+                <AccordionSummary>
+                  <Typography>자격증 관련</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Typography>지원자: XX명 준비 기간: XX</Typography>
+                </AccordionDetails>
+              </Accordion>
+            </Box>
           </AccordionDetails>
         </Accordion>
-
-          ))}
+      ))}
     </>
   );
 }
@@ -185,4 +191,5 @@ interface CertificationInfo {
   name: string;
   jobsCnt: string;
   examDate: string;
+  jobsApplicant: string;
 }

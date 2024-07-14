@@ -9,6 +9,7 @@ import {
   Typography,
 } from "@mui/joy";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "../../utils/supabase";
 
 async function fetchDetailCategoryList(obligfldcd) {
@@ -57,10 +58,6 @@ async function fetchCertificationList(mdobligfldcd) {
   return uniqueData;
 }
 
-function goToDetailPage(certificationCode) {
-  //페이지 이동
-}
-
 //테스트 데이터
 let detailCategoryList = [
   { detailCode: "1", name: "경영" },
@@ -82,6 +79,7 @@ let certificationList = [
 ];
 
 function CertificationSearchModal({ open, setOpen, category }) {
+  const navigate = useNavigate();
   const [detailCategoryCode, setDetailCategoryCode] = useState("");
   const [certificationCode, setCertificationCode] = useState("");
   const [detailCategoryList, setDetailCategoryList] = useState([]);
@@ -126,9 +124,11 @@ function CertificationSearchModal({ open, setOpen, category }) {
     event: React.SyntheticEvent | null,
     newValue: string | null,
   ) => {
-    setCertificationCode(newValue);
     console.log("닫기 클릭", newValue);
-    goToDetailPage(newValue);
+    if (newValue) {
+      setCertificationCode(newValue);
+      navigate(`/detail/${newValue}`);
+    }
   };
 
   return (
@@ -153,7 +153,7 @@ function CertificationSearchModal({ open, setOpen, category }) {
           <Typography>대분류 : {category.name} </Typography>
 
           <Select
-            defaultValue="end"
+            defaultValue=""
             indicator={<KeyboardArrowDown />}
             sx={{}}
             onChange={handleDetailCategoryChange}
@@ -165,7 +165,7 @@ function CertificationSearchModal({ open, setOpen, category }) {
             ))}
           </Select>
           <Select
-            defaultValue="end"
+            defaultValue=""
             indicator={<KeyboardArrowDown />}
             sx={{}}
             onChange={handleCertificationCodeChange}
