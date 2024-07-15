@@ -8,6 +8,7 @@ import {
   Box
 } from "@mui/joy";
 import { useEffect, useState } from "react";
+import { useCertificationDateInfo } from "../../api/useCertificationDateInfo";
 import { supabase } from "../../utils/supabase";
 
 const FILTER_OPTIONS = {
@@ -38,6 +39,7 @@ async function fetchCertificationData(filter) {
       data = await Promise.all(
         details.map(async (detail) => {
           const name = await fetchCertificationName(detail.id);
+          // const date = await useCertificationDateInfo(examTypeCode);
           return { ...detail, name };
         }),
       );
@@ -104,6 +106,7 @@ async function fetchCertificationName(id: string) {
 }
 
 function CertificationTable({ filterComponentProps }) {
+  console.log(useCertificationDateInfo("02"));
   const { filter, setFilter } = filterComponentProps;
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
