@@ -23,7 +23,7 @@ export function RecruitmentNotice(props: RecruitmentNoticeProps): JSX.Element {
     largeCategory: "",
     middleCategory: "",
   });
-  
+
   if (isLoading) return <CircularProgress />;
 
   return (

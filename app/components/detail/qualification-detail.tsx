@@ -10,7 +10,7 @@ import {
 } from "@mui/joy";
 import "chart.js/auto";
 import { useState } from "react";
-import { Bar, Pie } from "react-chartjs-2";
+import StatisticsDetail from "./statistics-detail";
 
 export function QualificationDetail(
   props: QualificationDetailProps,
@@ -75,7 +75,7 @@ export function QualificationDetail(
         </Stack>
 
         {selectedButton === MenuType.Exam && <ExamBox />}
-        {selectedButton === MenuType.Statistics && <StatisticsBox />}
+        {selectedButton === MenuType.Statistics && <StatisticsDetail />}
       </Container>
     </Container>
   );
@@ -130,82 +130,6 @@ function ExamBox(): JSX.Element {
         </Typography>
       </Box>
     </Box>
-  );
-}
-
-const barData = {
-  labels: ["January", "February", "March", "April", "May", "June"],
-  datasets: [
-    {
-      label: "Monthly Sales",
-      data: [65, 59, 80, 81, 56, 55],
-      backgroundColor: "rgba(75, 192, 192, 0.2)",
-      borderColor: "rgba(75, 192, 192, 1)",
-      borderWidth: 1,
-    },
-  ],
-};
-
-const pieData = {
-  labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-  datasets: [
-    {
-      label: "# of Votes",
-      data: [12, 19, 3, 5, 2, 3],
-      backgroundColor: [
-        "rgba(255, 99, 132, 0.2)",
-        "rgba(54, 162, 235, 0.2)",
-        "rgba(255, 206, 86, 0.2)",
-        "rgba(75, 192, 192, 0.2)",
-        "rgba(153, 102, 255, 0.2)",
-        "rgba(255, 159, 64, 0.2)",
-      ],
-      borderColor: [
-        "rgba(255, 99, 132, 1)",
-        "rgba(54, 162, 235, 1)",
-        "rgba(255, 206, 86, 1)",
-        "rgba(75, 192, 192, 1)",
-        "rgba(153, 102, 255, 1)",
-        "rgba(255, 159, 64, 1)",
-      ],
-      borderWidth: 1,
-    },
-  ],
-};
-
-function StatisticsBox(): JSX.Element {
-  return (
-    <Container sx={{}}>
-      <Typography fontWeight="md" sx={{ mt: 2 }}>
-        검정 현황
-      </Typography>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-evenly",
-          alignItems: "center",
-          height: "10vh",
-        }}
-      >
-        <Bar data={barData} />
-        <Pie data={pieData} />
-      </Box>
-
-      <Typography fontWeight="md" sx={{ mt: 5 }}>
-        수험자 동향
-      </Typography>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-evenly",
-          alignItems: "center",
-          height: "10vh",
-        }}
-      >
-        <Bar data={barData} />
-        <Pie data={pieData} />
-      </Box>
-    </Container>
   );
 }
 
