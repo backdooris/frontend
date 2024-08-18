@@ -104,3 +104,17 @@ export interface CertificationDetail {
     };
   };
 }
+
+export enum ExamType {
+  WRITTEN = 0,
+  PRACTICAL = 1,
+}
+
+export interface ExamInfo {
+  id: number;
+  year: string;
+  exam_type: ExamType;
+  applicant_count: number;
+  candidate_count: number;
+  passer_count: number;
+}

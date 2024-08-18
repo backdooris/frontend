@@ -1,9 +1,9 @@
 import { Stack } from "@mui/joy";
 import { useEffect, useState } from "react";
 import { supabase } from "../../utils/supabase";
-import CertificationCardList from "./certification-card-list.tsx";
-import CertificationCardTable from "./certification-card-table.tsx";
-import { SearchBox } from "./search-box.tsx";
+import CertificationCardList from "./certification-card-list";
+import CertificationCardTable from "./certification-card-table";
+import { SearchBox } from "./search-box";
 
 async function fetchCertificationNameId(searchTerm) {
   const { data, error } = await supabase

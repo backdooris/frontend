@@ -15,7 +15,7 @@ import StatisticsDetail from "./statistics-detail";
 export function QualificationDetail(
   props: QualificationDetailProps,
 ): JSX.Element {
-  const { sx, ...other } = props;
+  const { sx, jmcd, ...other } = props;
   const [selectedButton, setSelectedButton] = useState<MenuType>(MenuType.Exam);
   const handleButtonClick = (button: MenuType) => {
     setSelectedButton(button);
@@ -75,7 +75,7 @@ export function QualificationDetail(
         </Stack>
 
         {selectedButton === MenuType.Exam && <ExamBox />}
-        {selectedButton === MenuType.Statistics && <StatisticsDetail />}
+        {selectedButton === MenuType.Statistics && <StatisticsDetail jmcd={jmcd}/>}
       </Container>
     </Container>
   );
@@ -137,4 +137,7 @@ enum MenuType {
   Exam = "exam",
   Statistics = "statistics",
 }
-type QualificationDetailProps = Omit<ContainerProps, "children">;
+
+type QualificationDetailProps = Omit<ContainerProps, "children"> & {
+  jmcd?: string
+};

@@ -1,11 +1,10 @@
 import {
   Accordion,
   AccordionDetails,
-  AccordionGroup,
   AccordionSummary,
+  Box,
   Table,
   Typography,
-  Box
 } from "@mui/joy";
 import { useEffect, useState } from "react";
 import { useCertificationDateInfo } from "../../api/useCertificationDateInfo";

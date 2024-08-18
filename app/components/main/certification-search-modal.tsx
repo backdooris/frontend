@@ -127,7 +127,7 @@ function CertificationSearchModal({ open, setOpen, category }) {
     console.log("닫기 클릭", newValue);
     if (newValue) {
       setCertificationCode(newValue);
-      navigate(`/detail/${newValue}`);
+      navigate(`/detail?jmcd=${newValue}`);
     }
   };
 

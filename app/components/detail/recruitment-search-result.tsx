@@ -16,7 +16,9 @@ export function RecruitmentSearchResult(
   props: RecruitmentSearchResultProps,
 ): JSX.Element {
   const { sx, data, ...other } = props;
-
+  if (!data) {
+    return <div>empty</div>;
+  }
   return (
     <Container
       sx={{
@@ -98,5 +100,5 @@ const ResultCard: React.FC<JobInfoItem> = ({
 };
 
 type RecruitmentSearchResultProps = Omit<ContainerProps, "children"> & {
-  data: JobInfoItem[];
+  data?: JobInfoItem[];
 };
