@@ -8,7 +8,7 @@ import { SearchBox } from "./search-box";
 async function fetchCertificationNameId(searchTerm) {
   const { data, error } = await supabase
     .from("certification")
-    .select("code_kor, id")
+    .select("code_kor, id, jmcd")
     .ilike("code_kor", `%${searchTerm}%`);
 
   if (error) {
@@ -18,6 +18,7 @@ async function fetchCertificationNameId(searchTerm) {
   return data.map((item) => ({
     name: item.code_kor,
     id: item.id,
+    jmcd: item.jmcd
   }));
 }
 

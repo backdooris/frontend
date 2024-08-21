@@ -1,10 +1,12 @@
 import CloseIcon from "@mui/icons-material/Close";
 import { Table } from "@mui/joy";
+import { Link } from 'react-router-dom';
 
 export default function CertificationCardList({
   certifications,
   setShowCardList,
 }) {
+
   return (
     <>
       <Table
@@ -30,11 +32,13 @@ export default function CertificationCardList({
 
         <tbody>
           {certifications?.map((certification) => (
+           <Link to={`/detail?jmcd=${certification.jmcd}`}>
             <tr key={certification.name}>
               <td>{certification.name}</td>
               <td>{certification.jobsCnt}</td>
               <td>{certification.jobsCnt}</td>
             </tr>
+            </Link>
           ))}
         </tbody>
       </Table>
