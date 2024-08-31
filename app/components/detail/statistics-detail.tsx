@@ -1,9 +1,11 @@
 import { Box, Container, Typography } from "@mui/joy";
-import "chart.js/auto";
+import { CategoryScale, Chart as ChartJS } from "chart.js/auto";
 import { Bar, Pie } from "react-chartjs-2";
 import { useQStatsExamInfo } from "../../api/statistics/useQStatsExamInfo";
 import { ExamType } from "../../api/types/Qualification";
 import { useCertificationInfo } from "../../api/useCertificationDetail";
+
+ChartJS.register(CategoryScale);
 
 export default function StatisticsDetail({
   jmcd,
