@@ -43,9 +43,9 @@ export default function CertificationCardView() {
       try {
         const certificationsInfo = await fetchCertificationNameId(searchTerm);
 
-        let certificationsWithJobs = await Promise.all(
+        const certificationsWithJobs = await Promise.all(
           certificationsInfo.map(async (certification) => {
-            let jobsCnt = await fetchCertificationJobsCnt(certification.id);
+            const jobsCnt = await fetchCertificationJobsCnt(certification.id);
             return { ...certification, jobsCnt };
           }),
         );

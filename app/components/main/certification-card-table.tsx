@@ -60,6 +60,7 @@ export default function CertificationCardTable() {
       >
         {categories.map((category) => (
           <Card
+            key={category.name}
             size="sm"
             variant="soft"
             onClick={() => handleCardClick(category)}

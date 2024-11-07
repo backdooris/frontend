@@ -59,7 +59,7 @@ async function fetchCertificationList(mdobligfldcd) {
 }
 
 //테스트 데이터
-let detailCategoryList = [
+const detailCategoryList = [
   { detailCode: "1", name: "경영" },
   { detailCode: "2", name: "경영(사회조사분석)" },
   { detailCode: "3", name: "경영(소비자전문상담)" },
@@ -69,7 +69,7 @@ let detailCategoryList = [
   { detailCode: "7", name: "생산관리" },
 ];
 
-let certificationList = [
+const certificationList = [
   { certificationCode: "1", name: "사회조사분석사1급" },
   { certificationCode: "2", name: "사회조사분석사2급" },
   { certificationCode: "3", name: "소비자전문상담사1급" },

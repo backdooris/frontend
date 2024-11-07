@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@mui/joy";
 import { useEffect, useState } from "react";
-import { useCertificationDateInfo } from "../../api/useCertificationDateInfo";
+import { convertToDateObj } from "../../utils/date-formater";
 import { supabase } from "../../utils/supabase";
 
 const FILTER_OPTIONS = {
@@ -15,6 +15,87 @@ const FILTER_OPTIONS = {
   EXAM_DATE_ASC: "시험날짜 빠른 순",
   JOBS_CNT: "채용공고 순",
 };
+
+async function fetchCertificationTable() {
+  const { data, error } = await supabase
+    .from("certification")
+    .select("code_kor, id, jmcd, seriescd")
+    .not("jmcd", "is", null)
+    .not("seriescd", "is", null)
+    .limit(10);
+
+  if (error) {
+    console.error("Error fetching data:", error);
+    return [];
+  }
+  return data.map((item) => ({
+    name: item.code_kor,
+    id: item.id,
+    jmCode: item.jmcd,
+    seriesCode: item.seriescd,
+  }));
+}
+
+function getNearestFutureExamDate(testDates) {
+  let today = new Date();
+  let nearestTest = null;
+  let minDatesLeft = Infinity;
+  console.log("getnearest", testDates);
+  for (let i = 0; i < testDates.length; i++) {
+    let testDate = convertToDateObj(testDates[i].pracexamstartdt);
+    let datesLeft = testDate - today;
+    if (datesLeft > 0 && datesLeft < minDatesLeft) {
+      minDatesLeft = datesLeft;
+      nearestTest = testDates[i];
+    }
+  }
+  if (minDatesLeft === Infinity) nearestTest = testDates[testDates.length - 1];
+  return nearestTest;
+}
+
+async function fetchCertificationDate(seriescd) {
+  try {
+    const response = await fetch("../../../data/exam-date.json");
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    let filteredData = data.items.filter((testDate) => {
+      const [seriesPrefix] = testDate.seriescd.split("_");
+      return seriesPrefix === seriescd;
+    });
+    let examDate = getNearestFutureExamDate(filteredData);
+    return {
+      pracExamStartDate: examDate.pracexamstartdt,
+      pracExamEndDate: examDate.pracexamenddt,
+      docExamStartDate: examDate.docexamdt,
+      examDescription: examDate.description,
+    };
+  } catch (error) {
+    console.error("Error fetching JSON file:", error);
+    return [];
+  }
+}
+
+async function fetchCertification() {
+  const { data, error } = await supabase
+    .from("certification")
+    .select("code_kor, id, jmcd, seriescd")
+    .not("jmcd", "is", null)
+    .not("seriescd", "is", null);
+
+  if (error) {
+    console.error("Error fetching data:", error);
+    return [];
+  }
+  return data.map((item) => ({
+    name: item.code_kor,
+    id: item.id,
+    jmcd: item.jmcd,
+    seriescd: item.seriescd,
+  }));
+}
 
 async function fetchCertificationData(filter) {
   let data = "";
@@ -24,12 +105,22 @@ async function fetchCertificationData(filter) {
       details = await fetchCertifications();
       data = await Promise.all(
         details.map(async (detail) => {
-          const name = await fetchCertificationName(detail.id);
+          const { name, seriescd } = await fetchCertificationName(detail.id);
           return { ...detail, name };
         }),
       );
       break;
     case "EXAM_DATE_ASC":
+      details = await fetchCertificationTable();
+      console.log("EXAM_DATE_ASC", details);
+
+      data = await Promise.all(
+        details.map(async (detail) => {
+          const dateData = await fetchCertificationDate(detail.seriesCode);
+          return { ...detail, ...dateData };
+        }),
+      );
+      console.log("EXAM_DATE_ASC data!!", data);
       break;
     case "JOBS_CNT":
       details = await fetchCertificationsFilteredByJobsCnt();
@@ -37,14 +128,14 @@ async function fetchCertificationData(filter) {
 
       data = await Promise.all(
         details.map(async (detail) => {
-          const name = await fetchCertificationName(detail.id);
+          const { name, seriescd } = await fetchCertificationName(detail.id);
+          console.log("seriescd", seriescd);
           // const date = await useCertificationDateInfo(examTypeCode);
           return { ...detail, name };
         }),
       );
       break;
     default:
-      console.log("Unknown filter");
       break;
   }
   console.log("fetchCertificationData2", data);
@@ -96,20 +187,31 @@ async function fetchCertifications() {
 async function fetchCertificationName(id: string) {
   const { data, error } = await supabase
     .from("certification")
-    .select("code_kor")
+    .select("*")
     .eq("id", id);
   if (error) {
     throw new Error(`Error fetching certification name: ${error.message}`);
   }
-  return data[0].code_kor;
+  console.log("fetchCertificationName", data);
+  return { name: data[0].code_kor, code: data[0].seriescd };
+}
+
+function parseYYYYmmDD(yyyymmdd) {
+  console.log(yyyymmdd);
+  const year = yyyymmdd.substring(0, 4);
+  const month = yyyymmdd.substring(4, 6);
+  const date = yyyymmdd.substring(6, 8);
+  return { year, month, date };
 }
 
 function CertificationTable({ filterComponentProps }) {
-  console.log(useCertificationDateInfo("02"));
   const { filter, setFilter } = filterComponentProps;
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [certifications, setCertifications] = useState<CertificationInfo[]>([]);
+
+  // let examDateObj = useCertificationDateInfo("02");
+  // console.log("useCertificationDate", examDateObj);
 
   console.log(filterComponentProps);
   useEffect(() => {
@@ -173,7 +275,15 @@ function CertificationTable({ filterComponentProps }) {
                   <Typography>자격증 관련</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                  <Typography>지원자: XX명 준비 기간: XX</Typography>
+                  <Typography>
+                    {certification.examDescription} <br></br>
+                    지원자: XX명<br></br>
+                    필기 시험 일자: {certification.docExamStartDate}
+                    <br></br>
+                    실기 시험 시작 일자: {certification.pracExamStartDate}
+                    <br></br>
+                    실기 시험 종료 일자: {certification.pracExamEndDate}
+                  </Typography>
                 </AccordionDetails>
               </Accordion>
             </Box>
