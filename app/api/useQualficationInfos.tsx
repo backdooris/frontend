@@ -28,5 +28,8 @@ export const useQualificationInfos = () => {
     queryKey: ["qualificationInfos"],
     queryFn: fetchQualificationInfos,
     staleTime: 60 * 60 * 1000, // 1hour
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
   });
 };
