@@ -8,6 +8,7 @@ const url =
   "/openapi/InquiryInformationTradeNTQSVC/getList?serviceKey=nBhC8BCfrfbRbi%2FqxhY5ds%2BZ7CYtYXYkFKCgbf%2B0fc2S5eqXxFshv4%2FgqddA2Ch4j18Eis1SmFu7AtXE%2B%2FzOLQ%3D%3D&stdt=2023";
 
 const fetchQualificationInfos = async (): Promise<Qualification[]> => {
+  console.log("fetchQualificationInfos start")
   const response = await axios.get(url, {
     headers: {
       "Cache-Control": "no-cache", // 304 error 발생으로 캐시 정책 삭제

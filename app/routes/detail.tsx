@@ -15,6 +15,8 @@ export const Component = function Detail(): JSX.Element {
 
   const { isLoading: isLoading1 } = useQualifications();
   const { isLoading: isLoading2 } = useQualificationInfos();
+  console.log("isLoading1", isLoading1)
+  console.log("isLoading2", isLoading2)
   if (isLoading1 || isLoading2) return <CircularProgress />;
 
   return (
