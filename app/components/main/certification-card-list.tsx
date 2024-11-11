@@ -32,11 +32,11 @@ export default function CertificationCardList({
         <tbody>
           {certifications?.map((certification) => (
             <tr key={certification.name}>
-              <Link to={`/detail?jmcd=${certification.jmcd}`}>
+              <Link to={`/detail?jmcd=${certification.jmCode}`}>
                 <td>{certification.name}</td>
               </Link>
-              <td>{certification.jobsCnt}</td>
-              <td>{certification.jobsCnt}</td>
+              <td>{certification.pracExamStartDate}</td>
+              <td>{certification.jobCount}</td>
             </tr>
           ))}
         </tbody>

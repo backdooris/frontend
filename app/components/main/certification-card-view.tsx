@@ -5,21 +5,29 @@ import CertificationCardList from "./certification-card-list";
 import CertificationCardTable from "./certification-card-table";
 import { SearchBox } from "./search-box";
 
-async function fetchCertificationNameId(searchTerm) {
-  const { data, error } = await supabase
-    .from("certification")
-    .select("code_kor, id, jmcd")
-    .ilike("code_kor", `%${searchTerm}%`);
+// async function fetchCertificationNameId(searchTerm) {
+//   const { data, error } = await supabase
+//     .from("certification")
+//     .select("code_kor, id, jmcd")
+//     .ilike("code_kor", `%${searchTerm}%`);
 
-  if (error) {
-    console.error("Error fetching data:", error);
-    return [];
-  }
-  return data.map((item) => ({
-    name: item.code_kor,
-    id: item.id,
-    jmcd: item.jmcd
-  }));
+//   if (error) {
+//     console.error("Error fetching data:", error);
+//     return [];
+//   }
+//   return data.map((item) => ({
+//     name: item.code_kor,
+//     id: item.id,
+//     jmcd: item.jmcd,
+//   }));
+// }
+
+function searchCertifications(certifications, searchTerm) {
+  if (!searchTerm) return certifications;
+
+  return certifications.filter((certification) =>
+    certification.name.includes(searchTerm),
+  );
 }
 
 async function fetchCertificationJobsCnt(id) {
@@ -33,31 +41,37 @@ async function fetchCertificationJobsCnt(id) {
   return data[1].job_total_cnt;
 }
 
-export default function CertificationCardView() {
+export default function CertificationCardView({ certifications }) {
   const [searchTerm, setSearchTerm] = useState("");
-  const [certifications, setCertifications] = useState<CertificationInfo[]>([]);
+  const [searchResults, setSearchResults] = useState<CertificationInfo[]>([]);
   const [showCardList, setShowCardList] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const certificationsInfo = await fetchCertificationNameId(searchTerm);
-
-        const certificationsWithJobs = await Promise.all(
-          certificationsInfo.map(async (certification) => {
-            const jobsCnt = await fetchCertificationJobsCnt(certification.id);
-            return { ...certification, jobsCnt };
-          }),
-        );
-        setCertifications(certificationsWithJobs);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
 
     if (searchTerm !== "") {
-      fetchData();
+      let matchingCertifications = searchCertifications(certifications, searchTerm);
+      setSearchResults(matchingCertifications);
     }
+
+
+
+    // const fetchData = async () => {
+    //   try {
+    //     const certificationsInfo = await fetchCertificationNameId(searchTerm);
+
+    //     const certificationsWithJobs = await Promise.all(
+    //       certificationsInfo.map(async (certification) => {
+    //         const jobsCnt = await fetchCertificationJobsCnt(certification.id);
+    //         return { ...certification, jobsCnt };
+    //       }),
+    //     );
+    //     setCertifications(certificationsWithJobs);
+    //   } catch (error) {
+    //     console.error("Error fetching data:", error);
+    //   }
+    // };
+
+
   }, [searchTerm]);
 
   return (
@@ -70,7 +84,7 @@ export default function CertificationCardView() {
         />
         {showCardList ? (
           <CertificationCardList
-            certifications={certifications}
+            certifications={searchResults}
             setShowCardList={setShowCardList}
           ></CertificationCardList>
         ) : (
