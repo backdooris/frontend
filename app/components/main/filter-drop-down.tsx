@@ -4,12 +4,12 @@ import { useState } from "react";
 
 function FilterDropDown({ options, componentProps }) {
   const { filter, setFilter } = componentProps;
-  const [filterText, setfilterText] =
+  const [filterText, setFilterText] =
     useState<string>("자격증 필터를 설정해주세요");
 
   const handleSelect = (key, value: string) => {
     setFilter(key);
-    setfilterText(value);
+    setFilterText(value);
   };
 
   return (

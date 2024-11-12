@@ -7,63 +7,12 @@ import {
   Typography,
 } from "@mui/joy";
 import { useState } from "react";
-import { convertToDateObj } from "../../utils/date-formater";
-import { supabase } from "../../utils/supabase";
 
 const FILTER_OPTIONS = {
   POPULARITY: "인기순",
   EXAM_DATE_ASC: "시험날짜 빠른 순",
   JOBS_CNT: "채용공고 순",
 };
-
-
-async function fetchCertificationData(filter) {
-  let data = "";
-  let details = "";
-  switch (filter) {
-    case "POPULARITY":
-      details = await fetchCertifications();
-      data = await Promise.all(
-        details.map(async (detail) => {
-          const { name, seriescd } = await fetchCertificationName(detail.id);
-          return { ...detail, name };
-        }),
-      );
-      break;
-    case "EXAM_DATE_ASC":
-      details = await fetchCertificationTable();
-      console.log("EXAM_DATE_ASC", details);
-
-      data = await Promise.all(
-        details.map(async (detail) => {
-          const dateData = await fetchCertificationDate(detail.seriesCode);
-          return { ...detail, ...dateData };
-        }),
-      );
-      console.log("EXAM_DATE_ASC data!!", data);
-      break;
-    case "JOBS_CNT":
-      details = await fetchCertificationsFilteredByJobsCnt();
-      console.log("fetchCertificationData1", details);
-
-      data = await Promise.all(
-        details.map(async (detail) => {
-          const { name, seriescd } = await fetchCertificationName(detail.id);
-          console.log("seriescd", seriescd);
-          // const date = await useCertificationDateInfo(examTypeCode);
-          return { ...detail, name };
-        }),
-      );
-      break;
-    default:
-      break;
-  }
-  console.log("fetchCertificationData2", data);
-
-  return data;
-}
-
-
 
 function parseYYYYmmDD(yyyymmdd) {
   console.log(yyyymmdd);
@@ -78,6 +27,7 @@ function CertificationTable({ filterComponentProps, filteredCertifications }) {
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [certifications, setCertifications] = useState<CertificationInfo[]>([]);
+
 
   return (
     <>

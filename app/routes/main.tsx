@@ -141,6 +141,8 @@ export const Component = function MainPage(): JSX.Element {
     fetchAndCombineData();
   }, []);
 
+
+
   return (
     <Container sx={{ py: 2 }}>
       <Stack spacing={2}>
