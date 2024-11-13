@@ -133,3 +133,18 @@ export interface CertificationDate {
   finalExamEndDate: string;               // 실기 시험 종료일
   finalExamResultDate: string;            // 합격자 발표
 }
+
+
+export interface CertificationInfo {
+  id: string;
+  name: string;
+  jobCount: number;
+  examDate: string;
+  jobApplicants: string;
+  jmCode: string;
+  seriesCode: string;
+  pracExamStartDate: string;
+  pracExamEndDate: string;
+  docExamStartDate: string;
+  examDescription: string;
+}

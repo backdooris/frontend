@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../utils/supabase";
 
-async function fetchDetailCategoryList(obligfldcd) {
+async function fetchDetailCategoryList(obligfldcd: string) {
   const { data, error } = await supabase
     .from("certification")
     .select("mdobligfldcd, mdobligfldnm")
@@ -35,7 +35,7 @@ async function fetchDetailCategoryList(obligfldcd) {
   return uniqueData;
 }
 
-async function fetchCertificationList(mdobligfldcd) {
+async function fetchCertificationList(mdobligfldcd: string) {
   const { data, error } = await supabase
     .from("certification")
     .select("code_kor, jmcd")
@@ -78,12 +78,16 @@ const certificationList = [
   { certificationCode: "6", name: "컨벤션기획사2급" },
 ];
 
-function CertificationSearchModal({ open, setOpen, category }) {
+function CertificationSearchModal({
+  open,
+  setOpen,
+  category,
+}: CertificationSearchModalProps) {
   const navigate = useNavigate();
-  const [detailCategoryCode, setDetailCategoryCode] = useState("");
-  const [certificationCode, setCertificationCode] = useState("");
-  const [detailCategoryList, setDetailCategoryList] = useState([]);
-  const [certificationList, setCertificationList] = useState([]);
+  const [detailCategoryCode, setDetailCategoryCode] = useState<string>("");
+  const [certificationCode, setCertificationCode] = useState<string>("");
+  const [detailCategoryList, setDetailCategoryList] = useState<Category[]>([]);
+  const [certificationList, setCertificationList] = useState<Category[]>([]);
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
@@ -113,10 +117,9 @@ function CertificationSearchModal({ open, setOpen, category }) {
   }, [detailCategoryCode]);
 
   const handleDetailCategoryChange = (
-    event: React.SyntheticEvent | null,
-    newValue: string | null,
+    event: React.ChangeEvent<{ value: unknown }>,
   ) => {
-    console.log("중분류 선택");
+    const newValue = event.target.value as string;
     setDetailCategoryCode(newValue);
   };
 
@@ -124,7 +127,6 @@ function CertificationSearchModal({ open, setOpen, category }) {
     event: React.SyntheticEvent | null,
     newValue: string | null,
   ) => {
-    console.log("닫기 클릭", newValue);
     if (newValue) {
       setCertificationCode(newValue);
       navigate(`/detail?jmcd=${newValue}`);
@@ -150,7 +152,7 @@ function CertificationSearchModal({ open, setOpen, category }) {
       >
         <ModalDialog variant="soft">
           <ModalClose />
-          <Typography>대분류 : {category.name} </Typography>
+          <Typography>대분류 : {category?.name} </Typography>
 
           <Select
             defaultValue=""
@@ -184,3 +186,14 @@ function CertificationSearchModal({ open, setOpen, category }) {
 }
 
 export { CertificationSearchModal };
+
+interface CertificationSearchModalProps {
+  open: boolean;
+  setOpen: Function;
+  category: Category;
+}
+
+interface Category {
+  code: string;
+  name: string;
+}

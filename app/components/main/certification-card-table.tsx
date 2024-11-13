@@ -29,13 +29,13 @@ async function fetchCertificationCategory() {
 export default function CertificationCardTable() {
   const [loading, setLoading] = useState<boolean>(true);
   const [open, setOpen] = useState<boolean>(false);
-  const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState({});
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<Category>({name: "", code: ""});
 
   useEffect(() => {
     const fetchCategory = async () => {
       try {
-        const category = await fetchCertificationCategory();
+        const category: Category[] = await fetchCertificationCategory();
         setCategories(category);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -44,7 +44,7 @@ export default function CertificationCardTable() {
     fetchCategory();
   }, []);
 
-  function handleCardClick(category) {
+  function handleCardClick(category: Category) {
     setSelectedCategory(category);
     setOpen(true);
   }
@@ -93,4 +93,9 @@ export default function CertificationCardTable() {
       </Stack>
     </>
   );
+}
+
+interface Category {
+  code: string;
+  name: string;
 }

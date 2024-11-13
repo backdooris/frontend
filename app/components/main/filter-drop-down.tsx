@@ -2,12 +2,12 @@ import ArrowDropDown from "@mui/icons-material/ArrowDropDown";
 import { Dropdown, Menu, MenuButton, MenuItem } from "@mui/joy";
 import { useState } from "react";
 
-function FilterDropDown({ options, componentProps }) {
+function FilterDropDown({ options, componentProps }:FilterDropDownProps) {
   const { filter, setFilter } = componentProps;
   const [filterText, setFilterText] =
     useState<string>("자격증 필터를 설정해주세요");
 
-  const handleSelect = (key, value: string) => {
+  const handleSelect = (key: string, value: string) => {
     setFilter(key);
     setFilterText(value);
   };
@@ -35,3 +35,20 @@ function FilterDropDown({ options, componentProps }) {
 }
 
 export { FilterDropDown };
+
+// enum FilterType {
+//   Popularity = "인기도순",
+//   Recruitment = "채용순",
+//   ExamDate = "시험 날짜 순",
+// }
+
+interface FilterDropDownProps {
+  options: FilterType
+  componentProps: FilterComponentProps
+}
+
+
+interface FilterComponentProps {
+  filter: string;
+  setFilter: (filter: FilterType) => void;
+}

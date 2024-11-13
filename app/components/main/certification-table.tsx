@@ -7,6 +7,7 @@ import {
   Typography,
 } from "@mui/joy";
 import { useState } from "react";
+import { CertificationInfo } from "../../api/types/Qualification";
 
 const FILTER_OPTIONS = {
   POPULARITY: "인기순",
@@ -14,20 +15,7 @@ const FILTER_OPTIONS = {
   JOBS_CNT: "채용공고 순",
 };
 
-function parseYYYYmmDD(yyyymmdd) {
-  console.log(yyyymmdd);
-  const year = yyyymmdd.substring(0, 4);
-  const month = yyyymmdd.substring(4, 6);
-  const date = yyyymmdd.substring(6, 8);
-  return { year, month, date };
-}
-
-function CertificationTable({ filterComponentProps, filteredCertifications }) {
-  const { filter, setFilter } = filterComponentProps;
-  const [error, setError] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(true);
-  const [certifications, setCertifications] = useState<CertificationInfo[]>([]);
-
+function CertificationTable({ filterComponentProps, filteredCertifications }: CertificationTableProps) {
 
   return (
     <>
@@ -95,14 +83,18 @@ function CertificationTable({ filterComponentProps, filteredCertifications }) {
 
 export { CertificationTable };
 
-type Certifications = CertificationInfo[];
+enum FilterType {
+  Popularity = "인기도순",
+  Recruitment = "채용순",
+  ExamDate = "시험 날짜 순",
+}
 
-interface CertificationInfo {
-  id: string;
-  name: string;
-  jobCount: string;
-  examDate: string;
-  jobApplicants: string;
-  jmCode: string;
-  seriesCode: string;
+interface FilterComponentProps {
+  filter: string;
+  setFilter: (filter: FilterType) => void;
+}
+
+interface CertificationTableProps {
+  filterComponentProps : FilterComponentProps
+  filteredCertifications : CertificationInfo[]
 }

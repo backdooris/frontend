@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
+import { CertificationInfo } from "../../api/types/Qualification";
 import { CertificationTable } from "./certification-table";
 import { FilterDropDown } from "./filter-drop-down";
 
-export default function CertificationFilterView({ certifications }) {
-  const [filter, setFilter] = useState("POPULARITY");
+export default function CertificationFilterView({
+  certifications,
+}: {
+  certifications: CertificationInfo[];
+}) {
+  const [filter, setFilter] = useState("ALPHABETICAL");
   const [certificationsAlphabetical, setCertificationsAlphabetical] = useState<
     CertificationInfo[]
   >([]);
@@ -17,7 +22,8 @@ export default function CertificationFilterView({ certifications }) {
     CertificationInfo[]
   >([]);
   const FILTER_OPTIONS = {
-    POPULARITY: "인기순",
+    ALPHABETICAL: "가나다순",
+    // POPULARITY: "인기순",
     EXAM_DATE_ASC: "시험날짜 빠른 순",
     JOB_COUNT: "채용공고 순",
   };
@@ -30,16 +36,18 @@ export default function CertificationFilterView({ certifications }) {
   useEffect(() => {
     const filterData = (filter: string) => {
       let filteredData = [];
-      console.log("filterchange!!", filter);
       switch (filter) {
+        case "ALPHABETICAL":
+          filteredData = [...certificationsAlphabetical];
+          break;
         case "EXAM_DATE_ASC":
-          filteredData = [...certificationsByTime]; // Creating new reference
+          filteredData = [...certificationsByTime];
           break;
         case "JOB_COUNT":
-          filteredData = [...certificationsByJobCount]; // Creating new reference
+          filteredData = [...certificationsByJobCount];
           break;
         default:
-          filteredData = [...certificationsByJobCount]; // Creating new reference
+          filteredData = [...certificationsAlphabetical];
           break;
       }
       setFilteredCertifications(filteredData);
@@ -56,19 +64,26 @@ export default function CertificationFilterView({ certifications }) {
     }
   }, [certifications]);
 
-  const getAlphabetical = (data) => {
+  const getAlphabetical = (data: CertificationInfo[]) => {
     return [...data].slice(0, 10);
   };
 
-  const getByTime = (data) => {
+  const getByTime = (data: CertificationInfo[]) => {
     return [...data]
-      .sort(
-        (a, b) => new Date(b.pracExamStartDate) - new Date(a.pracExamStartDate),
-      )
+      .filter((item) => item.pracExamStartDate !== "없음")
+      .sort((a, b) => {
+        const dateA = new Date(
+          `${a.pracExamStartDate.slice(0, 4)}-${a.pracExamStartDate.slice(4, 6)}-${a.pracExamStartDate.slice(6, 8)}`,
+        ).getTime();
+        const dateB = new Date(
+          `${b.pracExamStartDate.slice(0, 4)}-${b.pracExamStartDate.slice(4, 6)}-${b.pracExamStartDate.slice(6, 8)}`,
+        ).getTime();
+        return dateB - dateA;
+      })
       .slice(0, 10);
   };
 
-  const getByJobCount = (data) => {
+  const getByJobCount = (data: CertificationInfo[]) => {
     return [...data].sort((a, b) => b.jobCount - a.jobCount).slice(0, 10);
   };
   return (
@@ -94,14 +109,4 @@ enum FilterType {
 interface FilterComponentProps {
   filter: string;
   setFilter: (filter: FilterType) => void;
-}
-
-interface CertificationInfo {
-  id: string;
-  name: string;
-  jobCount: string;
-  examDate: string;
-  jobApplicants: string;
-  jmCode: string;
-  seriesCode: string;
 }

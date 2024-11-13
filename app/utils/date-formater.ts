@@ -14,3 +14,12 @@ export function convertToDateObj(yyyyMMdd: string) {
   const day = parseInt(yyyyMMdd.substring(6, 8), 10);
   return new Date(year, month, day);
 }
+
+
+function parseYYYYmmDD(yyyymmdd: string) {
+  console.log(yyyymmdd);
+  const year = yyyymmdd.substring(0, 4);
+  const month = yyyymmdd.substring(4, 6);
+  const date = yyyymmdd.substring(6, 8);
+  return { year, month, date };
+}

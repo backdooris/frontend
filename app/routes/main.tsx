@@ -5,7 +5,7 @@ import { supabase } from "../utils/supabase";
 import { Container, Stack, Typography } from "@mui/joy";
 import CertificationCardView from "../components/main/certification-card-view";
 import CertificationFilterView from "../components/main/certification-filter-view";
-
+import { CertificationInfo } from '../api/types/Qualification';
 async function fetchCertification() {
   const { data, error } = await supabase
     .from("certification")
@@ -129,7 +129,6 @@ export const Component = function MainPage(): JSX.Element {
           }),
         );
 
-        console.log("certsWithDetails", certsWithDetails);
         setCertifications(certsWithDetails);
       } catch (error) {
         setError(error.message);
@@ -153,17 +152,3 @@ export const Component = function MainPage(): JSX.Element {
     </Container>
   );
 };
-
-interface CertificationInfo {
-  id: string;
-  name: string;
-  jobCount: string;
-  examDate: string;
-  jobApplicants: string;
-  jmCode: string;
-  seriesCode: string;
-  pracExamStartDate: string;
-  pracExamEndDate: string;
-  docExamStartDate: string;
-  examDescription: string;
-}

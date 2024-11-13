@@ -1,7 +1,7 @@
 import { Button, Input, Typography } from "@mui/joy";
 import { useState } from "react";
 
-function SearchBox({ searchTerm, setSearchTerm, setShowCardList }) {
+function SearchBox({ searchTerm, setSearchTerm, setShowCardList }:SearchBoxProps) {
   const [input, setInput] = useState("");
 
   return (
@@ -30,3 +30,9 @@ function SearchBox({ searchTerm, setSearchTerm, setShowCardList }) {
 }
 
 export { SearchBox };
+
+interface SearchBoxProps {
+  searchTerm: string,
+  setSearchTerm: Function,
+  setShowCardList: Function
+}
