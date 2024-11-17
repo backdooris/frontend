@@ -3,15 +3,22 @@ import { supabase } from "../utils/supabase";
 import { CertificationDetail } from "./types/Qualification";
 
 const fetchCertificationInfo = async (
-  jmcd: string,
+  jmcd: string | undefined,
 ): Promise<CertificationDetail | null> => {
+  if (jmcd == undefined) {
+    return null;
+  }
+
   const { data, error } = await supabase
     .from("certification_detail")
     .select(
       `
     id,
     data,
-    certification!inner()
+    ...certification!inner (
+      jmcd,
+      content
+    )
     `,
     )
     .eq("certification.jmcd", jmcd)
@@ -31,7 +38,7 @@ const fetchCertificationInfo = async (
   }
 };
 
-export const useCertificationInfo = (jmcd: string) => {
+export const useCertificationInfo = (jmcd: string | undefined) => {
   return useQuery<CertificationDetail | null, Error>({
     queryKey: ["certificationInfo"],
     queryFn: () => fetchCertificationInfo(jmcd),

@@ -59,6 +59,13 @@ export interface StatisticGenderInfo {
 
 export interface CertificationDetail {
   id: number;
+  jmcd: string;
+  content: {
+    jmfldnm: string;
+    intro: string;
+    role: string;
+    career_path: string;
+  };
   data: {
     job_total_cnt: number;
     job_total_view_cnt: number;
