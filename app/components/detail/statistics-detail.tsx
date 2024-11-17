@@ -9,13 +9,14 @@ ChartJS.register(CategoryScale);
 
 export default function StatisticsDetail({
   jmcd,
+  isShow,
 }: StatisticsDetailProps): JSX.Element {
   if (!jmcd) {
     return <div>emtpy data!</div>;
   }
 
   return (
-    <Container sx={{}}>
+    <Container sx={{ visibility: isShow ? "" : "hidden" }}>
       <Typography fontWeight="md" sx={{ mt: 2 }}>
         직업 현황
       </Typography>
@@ -203,6 +204,7 @@ const getChartData = (obj: object) => {
 
 type StatisticsDetailProps = {
   jmcd?: string;
+  isShow: boolean;
 };
 
 type StrictDetailProps = {

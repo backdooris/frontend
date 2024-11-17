@@ -74,11 +74,11 @@ export function QualificationDetail(
             </Button>
           </ButtonGroup>
         </Stack>
-
-        {selectedButton === MenuType.Exam && <ExamBox jmcd={jmcd} />}
-        {selectedButton === MenuType.Statistics && (
-          <StatisticsDetail jmcd={jmcd} />
-        )}
+        <ExamBox jmcd={jmcd} isShow={selectedButton === MenuType.Exam} />
+        <StatisticsDetail
+          jmcd={jmcd}
+          isShow={selectedButton === MenuType.Statistics}
+        />
       </Container>
     </Container>
   );
@@ -86,9 +86,10 @@ export function QualificationDetail(
 
 type ExamBoxProps = {
   jmcd?: string;
+  isShow: boolean;
 };
 
-function ExamBox({ jmcd }: ExamBoxProps): JSX.Element {
+function ExamBox({ jmcd, isShow }: ExamBoxProps): JSX.Element {
   const { data, isLoading } = useCertificationInfo(jmcd);
 
   if (isLoading || data == undefined) {
@@ -97,7 +98,7 @@ function ExamBox({ jmcd }: ExamBoxProps): JSX.Element {
   const content = data.content;
 
   return (
-    <Box sx={{ mt: 3 }}>
+    <Box sx={{ mt: 3, display: isShow ? "block" : "none" }}>
       <Card>
         <Typography level="title-lg">{content.jmfldnm}</Typography>
         <Typography level="body-md">
