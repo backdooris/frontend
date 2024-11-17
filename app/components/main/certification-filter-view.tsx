@@ -1,14 +1,21 @@
 import { useEffect, useState } from "react";
 import { CertificationInfo } from "../../api/types/Qualification";
 import { CertificationTable } from "./certification-table";
-import { FilterDropDown } from "./filter-drop-down";
+import FilterDropDown from "./filter-drop-down";
 
 export default function CertificationFilterView({
   certifications,
 }: {
   certifications: CertificationInfo[];
 }) {
-  const [filter, setFilter] = useState("ALPHABETICAL");
+  const FILTER_OPTIONS = {
+    ALPHABETICAL: "가나다순",
+    // POPULARITY: "인기순",
+    EXAM_DATE_ASC: "시험날짜 빠른 순",
+    JOB_COUNT: "채용공고 순",
+  };
+
+  const [filter, setFilter] = useState<FilterType[keyof FilterType]>(FILTER_OPTIONS.ALPHABETICAL);
   const [certificationsAlphabetical, setCertificationsAlphabetical] = useState<
     CertificationInfo[]
   >([]);
@@ -21,12 +28,7 @@ export default function CertificationFilterView({
   const [filteredCertifications, setFilteredCertifications] = useState<
     CertificationInfo[]
   >([]);
-  const FILTER_OPTIONS = {
-    ALPHABETICAL: "가나다순",
-    // POPULARITY: "인기순",
-    EXAM_DATE_ASC: "시험날짜 빠른 순",
-    JOB_COUNT: "채용공고 순",
-  };
+
 
   const filterComponentProps: FilterComponentProps = {
     filter,
@@ -34,16 +36,16 @@ export default function CertificationFilterView({
   };
 
   useEffect(() => {
-    const filterData = (filter: string) => {
+    const filterData = (filter: FilterType[keyof FilterType]) => {
       let filteredData = [];
       switch (filter) {
-        case "ALPHABETICAL":
+        case FILTER_OPTIONS.ALPHABETICAL:
           filteredData = [...certificationsAlphabetical];
           break;
-        case "EXAM_DATE_ASC":
+        case FILTER_OPTIONS.EXAM_DATE_ASC:
           filteredData = [...certificationsByTime];
           break;
-        case "JOB_COUNT":
+        case FILTER_OPTIONS.JOB_COUNT:
           filteredData = [...certificationsByJobCount];
           break;
         default:
@@ -100,13 +102,15 @@ export default function CertificationFilterView({
   );
 }
 
-enum FilterType {
-  Popularity = "인기도순",
-  Recruitment = "채용순",
-  ExamDate = "시험 날짜 순",
+interface FilterType {
+  ALPHABETICAL : string;
+  EXAM_DATE_ASC : string;
+  JOB_COUNT : string;
 }
 
 interface FilterComponentProps {
-  filter: string;
-  setFilter: (filter: FilterType) => void;
+  filter: FilterType[keyof FilterType];
+  setFilter: (filter: FilterType[keyof FilterType]) => void;
 }
+
+

@@ -2,13 +2,13 @@ import ArrowDropDown from "@mui/icons-material/ArrowDropDown";
 import { Dropdown, Menu, MenuButton, MenuItem } from "@mui/joy";
 import { useState } from "react";
 
-function FilterDropDown({ options, componentProps }:FilterDropDownProps) {
+export default function FilterDropDown({ options, componentProps }:FilterDropDownProps) {
   const { filter, setFilter } = componentProps;
   const [filterText, setFilterText] =
     useState<string>("자격증 필터를 설정해주세요");
 
-  const handleSelect = (key: string, value: string) => {
-    setFilter(key);
+  const handleSelect = (key: keyof FilterType, value: string) => {
+    setFilter(value);
     setFilterText(value);
   };
 
@@ -23,9 +23,9 @@ function FilterDropDown({ options, componentProps }:FilterDropDownProps) {
             <MenuItem
               key={key}
               selected={filter === key}
-              onClick={() => handleSelect(key, options[key])}
-            >
-              {options[key]}
+              onClick={() => handleSelect(key as keyof FilterType, options[key as keyof FilterType])}
+              >
+              {options[key as keyof FilterType]}
             </MenuItem>
           ))}
         </Menu>
@@ -34,21 +34,19 @@ function FilterDropDown({ options, componentProps }:FilterDropDownProps) {
   );
 }
 
-export { FilterDropDown };
-
-// enum FilterType {
-//   Popularity = "인기도순",
-//   Recruitment = "채용순",
-//   ExamDate = "시험 날짜 순",
-// }
-
 interface FilterDropDownProps {
-  options: FilterType
-  componentProps: FilterComponentProps
+  options : FilterType;
+  componentProps : FilterComponentProps;
 }
 
+interface FilterType {
+  ALPHABETICAL : string;
+  EXAM_DATE_ASC : string;
+  JOB_COUNT : string;
+}
 
 interface FilterComponentProps {
-  filter: string;
-  setFilter: (filter: FilterType) => void;
+  filter: FilterType[keyof FilterType];
+  setFilter: (filter: FilterType[keyof FilterType]) => void;
 }
+

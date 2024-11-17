@@ -76,7 +76,7 @@ async function fetchCertificationJobCount(id) {
   };
 }
 
-async function fetchCertificationDate(seriescd) {
+async function fetchCertificationDate(seriescd : CertificationInfo['seriesCode']) {
   try {
     const response = await fetch("../../../data/exam-date.json");
 
