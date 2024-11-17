@@ -20,7 +20,14 @@ const fetchRegionSiDo = async (): Promise<RegionSiDoType[]> => {
     if (data === null || data.length === 0) {
       return [];
     }
-    return data;
+    const seen = new Set<number>();
+    return data.filter((item) => {
+      if (seen.has(item.sido_id)) {
+        return false;
+      }
+      seen.add(item.sido_id);
+      return true;
+    });
   }
 };
 

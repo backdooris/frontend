@@ -106,14 +106,14 @@ export function RecruitmentNotice(props: RecruitmentNoticeProps): JSX.Element {
           <Typography>중분류</Typography>
           <Select
             onChange={(_, value) => {
-              const sigungu = regionSiGunGu?.find((e) => e.sigungu_id == value);
+              const sigungu = regionSiGunGu?.find((e) => e.id == value);
               if (sigungu != null) {
                 setRegionInfo({
                   ...regionInfo,
-                  sigungu_id: sigungu?.sigungu_id,
+                  id: sigungu?.id,
                   sigungu_name: sigungu?.sigungu_name,
                 });
-                setRegions([...selectedRegions, sigungu.sigungu_id]);
+                setRegions([...selectedRegions, sigungu.id]);
               }
             }}
             indicator={<KeyboardArrowDown />}
@@ -128,7 +128,7 @@ export function RecruitmentNotice(props: RecruitmentNoticeProps): JSX.Element {
             }}
           >
             {regionSiGunGu?.map((e) => (
-              <Option key={e.sigungu_id} value={e.sigungu_id}>
+              <Option key={e.id} value={e.id}>
                 {e.sigungu_name}
               </Option>
             ))}
@@ -157,7 +157,7 @@ export function RecruitmentNotice(props: RecruitmentNoticeProps): JSX.Element {
           mt: 3,
         }}
       >
-        {regionInfo.sido_id && regionInfo.sigungu_id && (
+        {regionInfo.sido_id && regionInfo.id && (
           <Fragment>
             <Typography level="h4" fontWeight="lg" color="primary">
               [{regionInfo.sido_name} {regionInfo.sigungu_name} X]
@@ -193,7 +193,7 @@ type RecruitmentNoticeProps = Omit<ContainerProps, "children">;
 interface RegionInfo {
   sido_id?: number;
   sido_name?: string;
-  sigungu_id?: number;
+  id?: number;
   sigungu_name?: string;
 }
 

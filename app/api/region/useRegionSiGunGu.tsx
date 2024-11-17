@@ -14,7 +14,7 @@ const fetchRegionSiGunGu = async (
     .select(
       `
       sido_id,
-      sigungu_id,
+      id,
       sigungu_name
       `,
     )

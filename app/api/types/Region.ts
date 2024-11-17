@@ -5,6 +5,6 @@ export interface RegionSiDoType {
 
 export interface RegionSiGunGuType {
   sido_id: number;
-  sigungu_id: number;
+  id: number;
   sigungu_name: string;
 }
