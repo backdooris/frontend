@@ -8,7 +8,7 @@ import {
   Stack,
   Typography,
 } from "@mui/joy";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../utils/supabase";
 
@@ -59,24 +59,24 @@ async function fetchCertificationList(mdobligfldcd: string) {
 }
 
 //테스트 데이터
-const detailCategoryList = [
-  { detailCode: "1", name: "경영" },
-  { detailCode: "2", name: "경영(사회조사분석)" },
-  { detailCode: "3", name: "경영(소비자전문상담)" },
-  { detailCode: "4", name: "경영(컨벤션기획)" },
-  { detailCode: "5", name: "회계" },
-  { detailCode: "6", name: "사무" },
-  { detailCode: "7", name: "생산관리" },
-];
+// const detailCategoryList = [
+//   { detailCode: "1", name: "경영" },
+//   { detailCode: "2", name: "경영(사회조사분석)" },
+//   { detailCode: "3", name: "경영(소비자전문상담)" },
+//   { detailCode: "4", name: "경영(컨벤션기획)" },
+//   { detailCode: "5", name: "회계" },
+//   { detailCode: "6", name: "사무" },
+//   { detailCode: "7", name: "생산관리" },
+// ];
 
-const certificationList = [
-  { certificationCode: "1", name: "사회조사분석사1급" },
-  { certificationCode: "2", name: "사회조사분석사2급" },
-  { certificationCode: "3", name: "소비자전문상담사1급" },
-  { certificationCode: "4", name: "소비자전문상담사2급" },
-  { certificationCode: "5", name: "컨벤션기획사1급" },
-  { certificationCode: "6", name: "컨벤션기획사2급" },
-];
+// const certificationList = [
+//   { certificationCode: "1", name: "사회조사분석사1급" },
+//   { certificationCode: "2", name: "사회조사분석사2급" },
+//   { certificationCode: "3", name: "소비자전문상담사1급" },
+//   { certificationCode: "4", name: "소비자전문상담사2급" },
+//   { certificationCode: "5", name: "컨벤션기획사1급" },
+//   { certificationCode: "6", name: "컨벤션기획사2급" },
+// ];
 
 function CertificationSearchModal({
   open,
@@ -85,7 +85,6 @@ function CertificationSearchModal({
 }: CertificationSearchModalProps) {
   const navigate = useNavigate();
   const [detailCategoryCode, setDetailCategoryCode] = useState<string>("");
-  const [certificationCode, setCertificationCode] = useState<string>("");
   const [detailCategoryList, setDetailCategoryList] = useState<Category[]>([]);
   const [certificationList, setCertificationList] = useState<Category[]>([]);
   const [errorMessage, setErrorMessage] = useState("");
@@ -128,7 +127,6 @@ function CertificationSearchModal({
     newValue: string | null,
   ) => {
     if (newValue) {
-      setCertificationCode(newValue);
       navigate(`/detail?jmcd=${newValue}`);
     }
   };
@@ -189,9 +187,10 @@ export { CertificationSearchModal };
 
 interface CertificationSearchModalProps {
   open: boolean;
-  setOpen: Function;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   category: Category;
 }
+
 
 interface Category {
   code: string;

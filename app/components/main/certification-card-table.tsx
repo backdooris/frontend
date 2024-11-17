@@ -27,7 +27,6 @@ async function fetchCertificationCategory() {
 }
 
 export default function CertificationCardTable() {
-  const [loading, setLoading] = useState<boolean>(true);
   const [open, setOpen] = useState<boolean>(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<Category>({name: "", code: ""});

@@ -26,13 +26,13 @@ async function fetchCertification() {
 }
 
 function getNearestFutureExamDate(testDates) {
-  let today = new Date();
+ const today = new Date();
   let nearestTest = null;
   let minDatesLeft = Infinity;
   if (testDates.length <= 0) return "00000000";
   for (let i = 0; i < testDates.length; i++) {
-    let testDate = convertToDateObj(testDates[i].pracexamstartdt);
-    let datesLeft = testDate - today;
+    const testDate = convertToDateObj(testDates[i].pracexamstartdt);
+    const datesLeft = testDate - today;
     if (datesLeft > 0 && datesLeft < minDatesLeft) {
       minDatesLeft = datesLeft;
       nearestTest = testDates[i];
@@ -67,7 +67,7 @@ async function fetchCertificationJobCount(id) {
     console.error("Error fetching data:", error);
     return [];
   }
-  let nearestCreatedJobCount = getNearestCreatedAtJobCount(data);
+  const nearestCreatedJobCount = getNearestCreatedAtJobCount(data);
 
   return {
     id: nearestCreatedJobCount.certification,
@@ -84,11 +84,11 @@ async function fetchCertificationDate(seriescd : CertificationInfo['seriesCode']
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
-    let filteredData = data.items.filter((testDate) => {
+    const filteredData = data.items.filter((testDate) => {
       const [seriesPrefix] = testDate.seriescd.split("_");
       return seriesPrefix === seriescd;
     });
-    let examDate = getNearestFutureExamDate(filteredData);
+    const examDate = getNearestFutureExamDate(filteredData);
 
     return {
       pracExamStartDate: examDate.pracexamstartdt || "없음",
@@ -103,7 +103,6 @@ async function fetchCertificationDate(seriescd : CertificationInfo['seriesCode']
 }
 
 export const Component = function MainPage(): JSX.Element {
-  const [loading, setLoading] = useState<boolean>(true);
   const [certifications, setCertifications] = useState<CertificationInfo[]>([]);
   const [error, setError] = useState<string>("");
 
@@ -132,8 +131,6 @@ export const Component = function MainPage(): JSX.Element {
         setCertifications(certsWithDetails);
       } catch (error) {
         setError(error.message);
-      } finally {
-        setLoading(false);
       }
     };
 

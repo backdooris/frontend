@@ -22,7 +22,7 @@ export default function CertificationCardView({ certifications }: CertificationC
   useEffect(() => {
 
     if (searchTerm !== "") {
-      let matchingCertifications = searchCertifications(certifications, searchTerm);
+      const matchingCertifications = searchCertifications(certifications, searchTerm);
       setSearchResults(matchingCertifications);
     }
 

@@ -1,7 +1,7 @@
 import { Button, Input, Typography } from "@mui/joy";
 import { useState } from "react";
 
-function SearchBox({ searchTerm, setSearchTerm, setShowCardList }:SearchBoxProps) {
+function SearchBox({ setSearchTerm, setShowCardList }:SearchBoxProps) {
   const [input, setInput] = useState("");
 
   return (
@@ -33,6 +33,6 @@ export { SearchBox };
 
 interface SearchBoxProps {
   searchTerm: string,
-  setSearchTerm: Function,
-  setShowCardList: Function
+  setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
+  setShowCardList: React.Dispatch<React.SetStateAction<boolean>>;
 }

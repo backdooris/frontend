@@ -16,10 +16,10 @@ export function convertToDateObj(yyyyMMdd: string) {
 }
 
 
-function parseYYYYmmDD(yyyymmdd: string) {
-  console.log(yyyymmdd);
-  const year = yyyymmdd.substring(0, 4);
-  const month = yyyymmdd.substring(4, 6);
-  const date = yyyymmdd.substring(6, 8);
-  return { year, month, date };
-}
+// function parseYYYYmmDD(yyyymmdd: string) {
+//   console.log(yyyymmdd);
+//   const year = yyyymmdd.substring(0, 4);
+//   const month = yyyymmdd.substring(4, 6);
+//   const date = yyyymmdd.substring(6, 8);
+//   return { year, month, date };
+// }

@@ -6,16 +6,9 @@ import {
   Table,
   Typography,
 } from "@mui/joy";
-import { useState } from "react";
 import { CertificationInfo } from "../../api/types/Qualification";
 
-const FILTER_OPTIONS = {
-  POPULARITY: "인기순",
-  EXAM_DATE_ASC: "시험날짜 빠른 순",
-  JOBS_CNT: "채용공고 순",
-};
-
-function CertificationTable({ filterComponentProps, filteredCertifications }: CertificationTableProps) {
+function CertificationTable({ filteredCertifications }: CertificationTableProps) {
 
   return (
     <>
