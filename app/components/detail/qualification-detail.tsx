@@ -99,22 +99,24 @@ function ExamBox({ jmcd, isShow }: ExamBoxProps): JSX.Element {
 
   return (
     <Box sx={{ mt: 3, display: isShow ? "block" : "none" }}>
-      <Card>
-        <Typography level="title-lg">{content.jmfldnm}</Typography>
-        <Typography level="body-md">
-          {content.intro}
+      {content && (
+        <Card>
+          <Typography level="title-lg">{content.jmfldnm}</Typography>
+          <Typography level="body-md">
+            {content.intro}
+            <br />
+            <br />
+            <br />
+            {content.career_path}
+            <br />
+            <br />
+            <br />
+            {content.role}
+          </Typography>
           <br />
-          <br />
-          <br />
-          {content.career_path}
-          <br />
-          <br />
-          <br />
-          {content.role}
-        </Typography>
-        <br />
-        <Typography level="body-md">시험 날짜 2024.05.14 (D-14일)</Typography>
-      </Card>
+          <Typography level="body-md">시험 날짜 2024.05.14 (D-14일)</Typography>
+        </Card>
+      )}
       <Box
         sx={{
           display: "flex",

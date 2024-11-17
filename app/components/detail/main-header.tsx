@@ -1,9 +1,10 @@
 import HomeIcon from "@mui/icons-material/Home";
 import { Box, Stack, StackProps, Typography } from "@mui/joy";
+import { useNavigate } from "react-router-dom";
 
 export function MainHeader(props: MainHeaderProps): JSX.Element {
   const { sx, ...other } = props;
-
+  const navigate = useNavigate();
   return (
     <Stack
       spacing={2}
@@ -16,13 +17,27 @@ export function MainHeader(props: MainHeaderProps): JSX.Element {
       }}
       {...other}
     >
-      <Typography level="h1">LOGO</Typography>
+      <Typography
+        sx={{
+          cursor: "pointer",
+        }}
+        level="h1"
+        onClick={() => {
+          navigate("/");
+        }}
+      >
+        LOGO
+      </Typography>
       <Box
         sx={{
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
+          cursor: "pointer",
+        }}
+        onClick={() => {
+          navigate("/");
         }}
       >
         <HomeIcon sx={{ fontSize: 32 }} />

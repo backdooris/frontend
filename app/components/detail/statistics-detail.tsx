@@ -16,7 +16,12 @@ export default function StatisticsDetail({
   }
 
   return (
-    <Container sx={{ visibility: isShow ? "" : "hidden" }}>
+    <Container
+      sx={{
+        height: isShow ? "auto" : 0, // 차트가 보이지 않으면 height를 0으로 설정
+        overflow: "hidden", // 숨겨진 내용이 차트 안에서 잘리도록
+      }}
+    >
       <Typography fontWeight="md" sx={{ mt: 2 }}>
         직업 현황
       </Typography>
