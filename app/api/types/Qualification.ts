@@ -139,12 +139,51 @@ export interface CertificationInfo {
   id: string;
   name: string;
   jobCount: number;
-  examDate: string;
-  jobApplicants: string;
+  jobApplicants: number;
   jmCode: string;
   seriesCode: string;
   pracExamStartDate: string;
   pracExamEndDate: string;
   docExamStartDate: string;
   examDescription: string;
+}
+
+export interface TestDates {
+  seriescd: string;
+  description: string;
+  docexamdt?: string;
+  docpassdt?: string;
+  docregenddt?: string;
+  docregstartdt?: string;
+  vacantslot_docregenddt?: string;
+  vacantslot_docregstartdt?: string;
+  docsubmitentdt?: string;
+  docsubmitstartdt?: string;
+  pracexamenddt?: string;
+  pracexamstartdt?: string;
+  pracpassdt?: string;
+  pracregenddt?: string;
+  pracregstartdt?: string;
+}
+
+export interface JobData {
+  id: number;
+  created_at: string;
+  certification: number;
+  data: {
+    job_total_cnt: number;
+    job_total_view_cnt: number;
+    job_total_apply_cnt: number;
+    job_total_experience: Record<string, number>;
+    job_total_education: Record<string, number>;
+    job_total_salary: Record<string, number>;
+    job_total_age: Record<string, number>;
+    job_total_gender: Record<string, number>;
+  };
+}
+
+export interface JobCountResponse {
+  id: number;
+  jobCount: number;
+  jobApplicants: number;
 }
