@@ -1,19 +1,27 @@
 import { Box, Container, Typography } from "@mui/joy";
-import "chart.js/auto";
+import { CategoryScale, Chart as ChartJS } from "chart.js/auto";
 import { Bar, Pie } from "react-chartjs-2";
 import { useQStatsExamInfo } from "../../api/statistics/useQStatsExamInfo";
 import { ExamType } from "../../api/types/Qualification";
 import { useCertificationInfo } from "../../api/useCertificationDetail";
 
+ChartJS.register(CategoryScale);
+
 export default function StatisticsDetail({
   jmcd,
+  isShow,
 }: StatisticsDetailProps): JSX.Element {
   if (!jmcd) {
     return <div>emtpy data!</div>;
   }
 
   return (
-    <Container sx={{}}>
+    <Container
+      sx={{
+        height: isShow ? "auto" : 0, // 차트가 보이지 않으면 height를 0으로 설정
+        overflow: "hidden", // 숨겨진 내용이 차트 안에서 잘리도록
+      }}
+    >
       <Typography fontWeight="md" sx={{ mt: 2 }}>
         직업 현황
       </Typography>
@@ -201,6 +209,7 @@ const getChartData = (obj: object) => {
 
 type StatisticsDetailProps = {
   jmcd?: string;
+  isShow: boolean;
 };
 
 type StrictDetailProps = {

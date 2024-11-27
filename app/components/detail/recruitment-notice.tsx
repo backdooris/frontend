@@ -12,20 +12,21 @@ import {
   selectClasses,
 } from "@mui/joy";
 import { Fragment, useState } from "react";
+import { useRegionSiDo } from "../../api/region/useRegionSiDo";
+import { useRegionSiGunGu } from "../../api/region/useRegionSiGunGu";
 import { useJobInfos } from "../../api/useJobInfos";
 import { RecruitmentSearchResult } from "./recruitment-search-result";
 
 export function RecruitmentNotice(props: RecruitmentNoticeProps): JSX.Element {
   const { sx, ...other } = props;
 
-  const { data: jobInfo, isLoading } = useJobInfos();
-  const [categoryInfo, setCategoryInfo] = useState<CategoryInfo>({
-    largeCategory: "",
-    middleCategory: "",
-  });
+  const [regionInfo, setRegionInfo] = useState<RegionInfo>({});
+  const [selectedSido, setSido] = useState<number>(0);
+  const [selectedRegions, setRegions] = useState<number[]>([]);
 
-  if (isLoading) return <CircularProgress />;
-
+  const { data: jobInfo, isLoading } = useJobInfos(selectedRegions);
+  const { data: regionSido } = useRegionSiDo();
+  const { data: regionSiGunGu } = useRegionSiGunGu(selectedSido);
   return (
     <Container
       sx={{
@@ -72,12 +73,17 @@ export function RecruitmentNotice(props: RecruitmentNoticeProps): JSX.Element {
         <Box>
           <Typography>대분류</Typography>
           <Select
-            onChange={(_, value) =>
-              setCategoryInfo({
-                ...categoryInfo,
-                largeCategory: value as string,
-              })
-            }
+            value={selectedSido}
+            onChange={(_, value) => {
+              setSido(value as number);
+
+              const sido = regionSido?.find((e) => e.sido_id == value);
+              setRegionInfo({
+                ...regionInfo,
+                sido_id: sido?.sido_id,
+                sido_name: sido?.sido_name,
+              });
+            }}
             indicator={<KeyboardArrowDown />}
             sx={{
               mt: 1,
@@ -89,19 +95,27 @@ export function RecruitmentNotice(props: RecruitmentNoticeProps): JSX.Element {
               },
             }}
           >
-            <Option value="서울">서울</Option>
-            <Option value="경기도">경기도</Option>
+            {regionSido?.map((e) => (
+              <Option key={e.sido_id} value={e.sido_id}>
+                {e.sido_name}
+              </Option>
+            ))}
           </Select>
         </Box>
         <Box sx={{ mt: 2 }}>
           <Typography>중분류</Typography>
           <Select
-            onChange={(_, value) =>
-              setCategoryInfo({
-                ...categoryInfo,
-                middleCategory: value as string,
-              })
-            }
+            onChange={(_, value) => {
+              const sigungu = regionSiGunGu?.find((e) => e.id == value);
+              if (sigungu != null) {
+                setRegionInfo({
+                  ...regionInfo,
+                  id: sigungu?.id,
+                  sigungu_name: sigungu?.sigungu_name,
+                });
+                setRegions([...selectedRegions, sigungu.id]);
+              }
+            }}
             indicator={<KeyboardArrowDown />}
             sx={{
               mt: 1,
@@ -113,8 +127,11 @@ export function RecruitmentNotice(props: RecruitmentNoticeProps): JSX.Element {
               },
             }}
           >
-            <Option value="강남구">강남구</Option>
-            <Option value="도봉구">도봉구</Option>
+            {regionSiGunGu?.map((e) => (
+              <Option key={e.id} value={e.id}>
+                {e.sigungu_name}
+              </Option>
+            ))}
           </Select>
         </Box>
         <Button
@@ -125,9 +142,7 @@ export function RecruitmentNotice(props: RecruitmentNoticeProps): JSX.Element {
             py: 1,
           }}
           onClick={() =>
-            alert(
-              `${categoryInfo.largeCategory} ${categoryInfo.middleCategory}`,
-            )
+            alert(`${regionInfo?.sido_name} ${regionInfo?.sigungu_name}`)
           }
         >
           검색
@@ -142,17 +157,18 @@ export function RecruitmentNotice(props: RecruitmentNoticeProps): JSX.Element {
           mt: 3,
         }}
       >
-        {categoryInfo.largeCategory && categoryInfo.middleCategory && (
+        {regionInfo.sido_id && regionInfo.id && (
           <Fragment>
             <Typography level="h4" fontWeight="lg" color="primary">
-              [{categoryInfo.largeCategory} {categoryInfo.middleCategory} X]
+              [{regionInfo.sido_name} {regionInfo.sigungu_name} X]
             </Typography>
             <Button
               variant="plain"
               size="lg"
-              onClick={() =>
-                setCategoryInfo({ largeCategory: "", middleCategory: "" })
-              }
+              onClick={() => {
+                setSido(0);
+                setRegionInfo({});
+              }}
               sx={{
                 fontWeight: "xl",
                 fontSize: "xl",
@@ -166,17 +182,19 @@ export function RecruitmentNotice(props: RecruitmentNoticeProps): JSX.Element {
           </Fragment>
         )}
       </Stack>
-
-      <RecruitmentSearchResult sx={{ mt: 5 }} data={jobInfo} />
+      {isLoading && <CircularProgress />}
+      {!isLoading && <RecruitmentSearchResult sx={{ mt: 5 }} data={jobInfo} />}
     </Container>
   );
 }
 
 type RecruitmentNoticeProps = Omit<ContainerProps, "children">;
 
-interface CategoryInfo {
-  largeCategory: string;
-  middleCategory: string;
+interface RegionInfo {
+  sido_id?: number;
+  sido_name?: string;
+  id?: number;
+  sigungu_name?: string;
 }
 
 export interface JobInfoItem {

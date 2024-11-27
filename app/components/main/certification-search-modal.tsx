@@ -26,7 +26,6 @@ async function fetchDetailCategoryList(obligfldcd: string) {
     code: item.mdobligfldcd,
     name: item.mdobligfldnm,
   }));
-
   const uniqueData = formattedData.filter(
     (value, index, self) =>
       index ===
@@ -116,9 +115,9 @@ function CertificationSearchModal({
   }, [detailCategoryCode]);
 
   const handleDetailCategoryChange = (
-    event: React.ChangeEvent<{ value: unknown }>,
+    event: React.SyntheticEvent | null,
+    newValue: string | null,
   ) => {
-    const newValue = event.target.value as string;
     setDetailCategoryCode(newValue);
   };
 

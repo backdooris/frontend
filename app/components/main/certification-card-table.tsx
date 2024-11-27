@@ -44,6 +44,7 @@ export default function CertificationCardTable() {
   }, []);
 
   function handleCardClick(category: Category) {
+    console.log("category", category)
     setSelectedCategory(category);
     setOpen(true);
   }

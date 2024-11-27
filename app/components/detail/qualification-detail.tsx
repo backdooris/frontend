@@ -10,6 +10,7 @@ import {
 } from "@mui/joy";
 import "chart.js/auto";
 import { useState } from "react";
+import { useCertificationInfo } from "../../api/useCertificationDetail";
 import StatisticsDetail from "./statistics-detail";
 
 export function QualificationDetail(
@@ -73,52 +74,49 @@ export function QualificationDetail(
             </Button>
           </ButtonGroup>
         </Stack>
-
-        {selectedButton === MenuType.Exam && <ExamBox />}
-        {selectedButton === MenuType.Statistics && <StatisticsDetail jmcd={jmcd}/>}
+        <ExamBox jmcd={jmcd} isShow={selectedButton === MenuType.Exam} />
+        <StatisticsDetail
+          jmcd={jmcd}
+          isShow={selectedButton === MenuType.Statistics}
+        />
       </Container>
     </Container>
   );
 }
 
-function ExamBox(): JSX.Element {
+type ExamBoxProps = {
+  jmcd?: string;
+  isShow: boolean;
+};
+
+function ExamBox({ jmcd, isShow }: ExamBoxProps): JSX.Element {
+  const { data, isLoading } = useCertificationInfo(jmcd);
+
+  if (isLoading || data == undefined) {
+    return <></>;
+  }
+  const content = data.content;
+
   return (
-    <Box sx={{ mt: 3 }}>
-      <Card>
-        <Typography level="title-lg">
-          사회조사분석사{" "}
-          <Typography
-            level="title-lg"
-            textColor="success.plainColor"
-            fontFamily="monospace"
-            sx={{ opacity: "50%" }}
-          >
-            title-lg
+    <Box sx={{ mt: 3, display: isShow ? "block" : "none" }}>
+      {content && (
+        <Card>
+          <Typography level="title-lg">{content.jmfldnm}</Typography>
+          <Typography level="body-md">
+            {content.intro}
+            <br />
+            <br />
+            <br />
+            {content.career_path}
+            <br />
+            <br />
+            <br />
+            {content.role}
           </Typography>
-        </Typography>
-        <Typography level="body-md">
-          사회조사분석사란 다양한 사회정보의 수집·분석·활용을 담당하는 새로운
-          직종으로 기 업, 정당, 지방자치단체, 중앙정부 등 각종 단체의 시장조사
-          및 여론조사 등에 대한 계 획을 수립하고 조사를 수행하며 그 결과를 분석,
-          보고서를 작성하는 전문가이다. 지식 사회조사를 완벽하게 끝내기 위해서는
-          '사회조사방법론'은 물론이고 자료분석을 위한 '통계지식', 통계분석을
-          위한 '통계패키지프로그램' 이용법 등을 알아야 한다. 또, 부가적으로
-          알아야 할 분야는 마케팅관리론이나 소비자행동론, 기획론 등의 주변
-          관련분야로 이는 사회조사의 많은 부분이 기업과 소비자를 중심으로
-          발생하기 때문이 다. 사회조사분석사는 보다 정밀한 조사업무를 수행하기
-          위해 관련분야를 보다 폭넓게 경험하는 것이 중요하다
-          <Typography
-            level="body-md"
-            textColor="success.plainColor"
-            fontFamily="monospace"
-            sx={{ opacity: "50%" }}
-          >
-            body-md
-          </Typography>
-        </Typography>
-        <br />
-        <Typography level="body-md">시험 날짜 2024.05.14 (D-14일)</Typography>
-      </Card>
+          <br />
+          <Typography level="body-md">시험 날짜 2024.05.14 (D-14일)</Typography>
+        </Card>
+      )}
       <Box
         sx={{
           display: "flex",
@@ -139,5 +137,5 @@ enum MenuType {
 }
 
 type QualificationDetailProps = Omit<ContainerProps, "children"> & {
-  jmcd?: string
+  jmcd?: string;
 };
