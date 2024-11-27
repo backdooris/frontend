@@ -16,10 +16,11 @@ export function convertToDateObj(yyyyMMdd: string) {
 }
 
 
-// function parseYYYYmmDD(yyyymmdd: string) {
-//   console.log(yyyymmdd);
-//   const year = yyyymmdd.substring(0, 4);
-//   const month = yyyymmdd.substring(4, 6);
-//   const date = yyyymmdd.substring(6, 8);
-//   return { year, month, date };
-// }
+export function formatYYYYmmDD(yyyyMMdd: string){
+  if (yyyyMMdd.length !== 8) return yyyyMMdd;
+
+  const year = yyyyMMdd.slice(0, 4);
+  const month = yyyyMMdd.slice(4, 6);
+  const day = yyyyMMdd.slice(6, 8);
+  return `${year}년 ${month}월 ${day}일`;
+}

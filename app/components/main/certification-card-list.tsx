@@ -2,7 +2,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Table } from "@mui/joy";
 import { Link } from "react-router-dom";
 import { CertificationInfo } from "../../api/types/Qualification";
-
+import { formatYYYYmmDD } from "../../utils/date-formater";
 export default function CertificationCardList({
   certifications,
   setShowCardList,
@@ -36,7 +36,7 @@ export default function CertificationCardList({
               <Link to={`/detail?jmcd=${certification.jmCode}`}>
                 <td>{certification.name}</td>
               </Link>
-              <td>{certification.pracExamStartDate}</td>
+              <td>{formatYYYYmmDD(certification.pracExamStartDate)}</td>
               <td>{certification.jobCount}</td>
             </tr>
           ))}
