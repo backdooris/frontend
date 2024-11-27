@@ -1,10 +1,12 @@
 import CloseIcon from "@mui/icons-material/Close";
 import { Table } from "@mui/joy";
+import { Link } from "react-router-dom";
+import { CertificationInfo } from "../../api/types/Qualification";
 
 export default function CertificationCardList({
   certifications,
   setShowCardList,
-}) {
+}: CertificationCarListProps) {
   return (
     <>
       <Table
@@ -31,9 +33,11 @@ export default function CertificationCardList({
         <tbody>
           {certifications?.map((certification) => (
             <tr key={certification.name}>
-              <td>{certification.name}</td>
-              <td>{certification.jobsCnt}</td>
-              <td>{certification.jobsCnt}</td>
+              <Link to={`/detail?jmcd=${certification.jmCode}`}>
+                <td>{certification.name}</td>
+              </Link>
+              <td>{certification.pracExamStartDate}</td>
+              <td>{certification.jobCount}</td>
             </tr>
           ))}
         </tbody>
@@ -41,3 +45,8 @@ export default function CertificationCardList({
     </>
   );
 }
+
+type CertificationCarListProps = {
+  certifications: CertificationInfo[];
+  setShowCardList: (value: boolean) => void;
+};

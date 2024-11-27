@@ -125,3 +125,72 @@ export interface ExamInfo {
   candidate_count: number;
   passer_count: number;
 }
+
+export interface CertificationDate {
+  examRound: string;                      // 회차
+  preExamRegistrationStartDate: string;   // 필기 원서 접수 시작일
+  preExamRegistrationEndDate: string;     // 필기 원서 접수 종료일
+  preExamDate: string;                    // 필기 시험 일자
+  preExamResultDate: string;              // 필기 시험 합격자 발표일
+  docSubmissionStartDate: string;         // 응시자격 서류제출 및 필기시험 합격자 결정시작일자
+  docSubmissionEndDate: string;           // 응시자격 서류제출 및 필기시험 합격자 결정종료일자
+  finalExamRegistrationStartDate: string; // 실기 원서 접수 시작일
+  finalExamRegistrationEndDate: string;   // 실기 원서 접수 종료일
+  finalExamStartDate: string;             // 실기 시험 시작일
+  finalExamEndDate: string;               // 실기 시험 종료일
+  finalExamResultDate: string;            // 합격자 발표
+}
+
+
+export interface CertificationInfo {
+  id: string;
+  name: string;
+  jobCount: number;
+  jobApplicants: number;
+  jmCode: string;
+  seriesCode: string;
+  pracExamStartDate: string;
+  pracExamEndDate: string;
+  docExamStartDate: string;
+  examDescription: string;
+}
+
+export interface TestDates {
+  seriescd: string;
+  description: string;
+  docexamdt?: string;
+  docpassdt?: string;
+  docregenddt?: string;
+  docregstartdt?: string;
+  vacantslot_docregenddt?: string;
+  vacantslot_docregstartdt?: string;
+  docsubmitentdt?: string;
+  docsubmitstartdt?: string;
+  pracexamenddt?: string;
+  pracexamstartdt?: string;
+  pracpassdt?: string;
+  pracregenddt?: string;
+  pracregstartdt?: string;
+}
+
+export interface JobData {
+  id: number;
+  created_at: string;
+  certification: number;
+  data: {
+    job_total_cnt: number;
+    job_total_view_cnt: number;
+    job_total_apply_cnt: number;
+    job_total_experience: Record<string, number>;
+    job_total_education: Record<string, number>;
+    job_total_salary: Record<string, number>;
+    job_total_age: Record<string, number>;
+    job_total_gender: Record<string, number>;
+  };
+}
+
+export interface JobCountResponse {
+  id: number;
+  jobCount: number;
+  jobApplicants: number;
+}
