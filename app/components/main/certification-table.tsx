@@ -7,6 +7,7 @@ import {
   Typography,
 } from "@mui/joy";
 import { CertificationInfo } from "../../api/types/Qualification";
+import { formatYYYYmmDD } from "../../utils/date-formater";
 
 function CertificationTable({ filteredCertifications }: CertificationTableProps) {
 
@@ -58,11 +59,11 @@ function CertificationTable({ filteredCertifications }: CertificationTableProps)
                   <Typography>
                     {certification.examDescription} <br></br>
                     {/* 지원자: XX명<br></br> */}
-                    필기 시험 일자: {certification.docExamStartDate}
+                    필기 시험 일자: {formatYYYYmmDD(certification.docExamStartDate)}
                     <br></br>
-                    실기 시험 시작 일자: {certification.pracExamStartDate}
+                    실기 시험 시작 일자: {formatYYYYmmDD(certification.pracExamStartDate)}
                     <br></br>
-                    실기 시험 종료 일자: {certification.pracExamEndDate}
+                    실기 시험 종료 일자: {formatYYYYmmDD(certification.pracExamEndDate)}
                   </Typography>
                 </AccordionDetails>
               </Accordion>
