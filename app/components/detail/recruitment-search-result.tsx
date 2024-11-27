@@ -1,9 +1,8 @@
 import {
-  AspectRatio,
   Box,
+  Button,
   Card,
   CardContent,
-  CardOverflow,
   Container,
   ContainerProps,
   Stack,
@@ -19,6 +18,7 @@ export function RecruitmentSearchResult(
   if (!data) {
     return <div>empty</div>;
   }
+
   return (
     <Container
       sx={{
@@ -42,25 +42,48 @@ const ResultCard: React.FC<JobInfoItem> = ({
   created_at,
   data,
 }) => {
+  const shareKakao = () => {
+    if (window.Kakao) {
+      const kakao = window.Kakao;
+
+      // 중복 initialization 방지
+      if (!kakao.isInitialized()) {
+        // 두번째 step 에서 가져온 javascript key 를 이용하여 initialize
+        kakao.init("a975051eabe13c23c2d6c139c0707baa");
+      }
+      kakao.Link.createDefaultButton({
+        objectType: "feed",
+        container: "#sendKakao",
+        content: {
+          title: `노인 일자리 탐색`,
+          imageUrl:
+            "https://www.simplywise.com/blog/wp-content/uploads/2023/06/shutterstock_658188250.jpeg",
+          description: "노인 일자리 탐색합니다",
+          link: {
+            mobileWebUrl: window.location.href,
+            webUrl: window.location.href,
+          },
+        },
+        buttons: [
+          {
+            title: "일자리 확인하기",
+            link: {
+              mobileWebUrl: window.location.href,
+              webUrl: window.location.href,
+            },
+          },
+        ],
+        installTalk: true,
+      });
+
+      setTimeout(() => {
+        document.getElementById("sendKakao")?.click();
+      }, 100);
+    }
+  };
+
   return (
     <Card orientation="horizontal" variant="soft">
-      <CardOverflow sx={{ flex: 1 }}>
-        <AspectRatio
-          ratio="1"
-          sx={{
-            mt: 1,
-            ml: 2,
-            width: 80,
-          }}
-        >
-          <img
-            src="https://images.unsplash.com/photo-1507833423370-a126b89d394b?auto=format&fit=crop&w=90"
-            srcSet="https://images.unsplash.com/photo-1507833423370-a126b89d394b?auto=format&fit=crop&w=90&dpr=2 2x"
-            loading="lazy"
-            alt=""
-          />
-        </AspectRatio>
-      </CardOverflow>
       <CardContent>
         <Typography level="title-lg" fontWeight="lg">
           {data.title}
@@ -78,7 +101,15 @@ const ResultCard: React.FC<JobInfoItem> = ({
           {region_kor}
         </Typography>
 
-        <Box>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            px: 1,
+            mt: 1,
+          }}
+        >
           <Typography
             variant="outlined"
             level="body-sm"
@@ -87,12 +118,14 @@ const ResultCard: React.FC<JobInfoItem> = ({
             sx={{
               display: "inline-block",
               borderRadius: 16,
-              px: 1,
-              mt: 1,
+              mr: 4,
             }}
           >
             {formatDate(new Date(created_at))}
           </Typography>
+          <Button id="sendKakao" onClick={shareKakao}>
+            카카오톡 공유하기
+          </Button>
         </Box>
       </CardContent>
     </Card>
