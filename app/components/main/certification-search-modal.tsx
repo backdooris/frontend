@@ -8,11 +8,11 @@ import {
   Stack,
   Typography,
 } from "@mui/joy";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../utils/supabase";
 
-async function fetchDetailCategoryList(obligfldcd) {
+async function fetchDetailCategoryList(obligfldcd: string) {
   const { data, error } = await supabase
     .from("certification")
     .select("mdobligfldcd, mdobligfldnm")
@@ -26,7 +26,6 @@ async function fetchDetailCategoryList(obligfldcd) {
     code: item.mdobligfldcd,
     name: item.mdobligfldnm,
   }));
-
   const uniqueData = formattedData.filter(
     (value, index, self) =>
       index ===
@@ -35,7 +34,7 @@ async function fetchDetailCategoryList(obligfldcd) {
   return uniqueData;
 }
 
-async function fetchCertificationList(mdobligfldcd) {
+async function fetchCertificationList(mdobligfldcd: string) {
   const { data, error } = await supabase
     .from("certification")
     .select("code_kor, jmcd")
@@ -59,31 +58,34 @@ async function fetchCertificationList(mdobligfldcd) {
 }
 
 //테스트 데이터
-let detailCategoryList = [
-  { detailCode: "1", name: "경영" },
-  { detailCode: "2", name: "경영(사회조사분석)" },
-  { detailCode: "3", name: "경영(소비자전문상담)" },
-  { detailCode: "4", name: "경영(컨벤션기획)" },
-  { detailCode: "5", name: "회계" },
-  { detailCode: "6", name: "사무" },
-  { detailCode: "7", name: "생산관리" },
-];
+// const detailCategoryList = [
+//   { detailCode: "1", name: "경영" },
+//   { detailCode: "2", name: "경영(사회조사분석)" },
+//   { detailCode: "3", name: "경영(소비자전문상담)" },
+//   { detailCode: "4", name: "경영(컨벤션기획)" },
+//   { detailCode: "5", name: "회계" },
+//   { detailCode: "6", name: "사무" },
+//   { detailCode: "7", name: "생산관리" },
+// ];
 
-let certificationList = [
-  { certificationCode: "1", name: "사회조사분석사1급" },
-  { certificationCode: "2", name: "사회조사분석사2급" },
-  { certificationCode: "3", name: "소비자전문상담사1급" },
-  { certificationCode: "4", name: "소비자전문상담사2급" },
-  { certificationCode: "5", name: "컨벤션기획사1급" },
-  { certificationCode: "6", name: "컨벤션기획사2급" },
-];
+// const certificationList = [
+//   { certificationCode: "1", name: "사회조사분석사1급" },
+//   { certificationCode: "2", name: "사회조사분석사2급" },
+//   { certificationCode: "3", name: "소비자전문상담사1급" },
+//   { certificationCode: "4", name: "소비자전문상담사2급" },
+//   { certificationCode: "5", name: "컨벤션기획사1급" },
+//   { certificationCode: "6", name: "컨벤션기획사2급" },
+// ];
 
-function CertificationSearchModal({ open, setOpen, category }) {
+function CertificationSearchModal({
+  open,
+  setOpen,
+  category,
+}: CertificationSearchModalProps) {
   const navigate = useNavigate();
-  const [detailCategoryCode, setDetailCategoryCode] = useState("");
-  const [certificationCode, setCertificationCode] = useState("");
-  const [detailCategoryList, setDetailCategoryList] = useState([]);
-  const [certificationList, setCertificationList] = useState([]);
+  const [detailCategoryCode, setDetailCategoryCode] = useState<string>("");
+  const [detailCategoryList, setDetailCategoryList] = useState<Category[]>([]);
+  const [certificationList, setCertificationList] = useState<Category[]>([]);
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
@@ -116,7 +118,6 @@ function CertificationSearchModal({ open, setOpen, category }) {
     event: React.SyntheticEvent | null,
     newValue: string | null,
   ) => {
-    console.log("중분류 선택");
     setDetailCategoryCode(newValue);
   };
 
@@ -124,9 +125,7 @@ function CertificationSearchModal({ open, setOpen, category }) {
     event: React.SyntheticEvent | null,
     newValue: string | null,
   ) => {
-    console.log("닫기 클릭", newValue);
     if (newValue) {
-      setCertificationCode(newValue);
       navigate(`/detail?jmcd=${newValue}`);
     }
   };
@@ -150,7 +149,7 @@ function CertificationSearchModal({ open, setOpen, category }) {
       >
         <ModalDialog variant="soft">
           <ModalClose />
-          <Typography>대분류 : {category.name} </Typography>
+          <Typography>대분류 : {category?.name} </Typography>
 
           <Select
             defaultValue=""
@@ -184,3 +183,15 @@ function CertificationSearchModal({ open, setOpen, category }) {
 }
 
 export { CertificationSearchModal };
+
+interface CertificationSearchModalProps {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  category: Category;
+}
+
+
+interface Category {
+  code: string;
+  name: string;
+}
